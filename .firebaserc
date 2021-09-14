@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "ms-sistema": {
+      "hosting": {
+        "ms-sistema": [
+          "ms-sistema"
+        ]
+      }
+    }
+  }
+}

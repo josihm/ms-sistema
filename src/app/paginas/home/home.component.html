@@ -1,0 +1,28 @@
+<div class="container justify-content-center align-items-center">
+    
+    <div class="card text-white bg-info mb-3" style="max-width: auto;">
+        <div class="card-header text-center"><h3>BIENVENIDO</h3></div>
+    </div>
+    
+    <ng-container *ngIf="isLogged; else loggedOut">    
+        <div class="card border-info mb-3" style="max-width: auto;">
+            <div class="card-header">Departamento: {{ this.deptoSesion.departamento }}</div>
+            <div class="card-body">
+                <h4 class="card-title">Titular: {{ this.deptoSesion.titular }}</h4>
+                <p class="card-text">Correo electrónico: {{ this.deptoSesion.correosind }}@aragon.unam.mx</p>
+                <p class="card-text">Telefóno directo: {{ this.deptoSesion.teldirecto }}</p>
+                <p class="card-text">Extensiones: {{ this.deptoSesion.ext }} {{ this.deptoSesion.ext2 }}</p>
+                <hr>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #loggedOut>
+        <div class="card border-info mb-3" style="max-width: auto;">
+            <div class="card-body">
+                <p class="card-text">
+                    FAVOR DE INICIAR SESION
+                </p>
+            </div>
+        </div>
+    </ng-template>
+</div>

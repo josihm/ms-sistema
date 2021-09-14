@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-info">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">JARDINERÍA y TRANSPORTE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">SOLICITUDES</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" routerLink='solicitudes-st'>Servicio de Transporte</a>
+              <a class="dropdown-item" routerLink="solicitudes-sc">Servicio de Correspondencia</a>
+              <a class="dropdown-item" href="#">Servicio de Jardinería</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" routerLink="pds">Pruebas</a>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <!--input class="form-control me-sm-2" type="text" placeholder="Search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button-->
+            <ul class="navbar-nav me-auto" *ngIf="this.usuarioActual$ | async  as user;else login">
+              <li class="nav-item">
+                <a class="nav-link">{{ user?.email }}</a>
+              </li>
+                <li class="nav-item" *ngIf="user">
+                  <a href="#" class="nav-link" (click)="logOut()"><mat-icon>logout</mat-icon></a>
+                </li>
+                
+            </ul>
+            <ng-template #login>
+              <ul class="navbar-nav me-auto">
+                <li class="nav-item" >
+                  <a class="nav-link" routerLink='/registro'><mat-icon>person_add</mat-icon></a>
+                </li>
+
+                <li class="nav-item" >
+                  <a class="nav-link" routerLink='/login'><mat-icon>login</mat-icon></a>
+                </li>
+                
+              </ul>
+            </ng-template>
+        </form>
+      </div>
+    </div>
+  </nav>
