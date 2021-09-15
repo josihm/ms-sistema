@@ -137,6 +137,19 @@ export class AuthService {
       console.log('error en registrar: ', error)
     }
   }
+  
+  async registraPorfavor(usuario: UsuarioInterface): Promise<UsuarioInterface| any>{
+    return await new Promise( async (resuelve, rechaza) => {
+      try {
+        this.usuario$ = await (await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.psw)).user?.uid;
+        //this.usuario$ = await (await this.afAuth.createUserWithEmailAndPassword(usuario.email, usuario.psw));
+        await firebase.default.auth().currentUser?.updateProfile({ displayName: usuario.displayName });
+        return await resuelve(this.usuario$);
+      } catch (error) {
+        return await rechaza(error.message);
+      }
+    });
+  }
 
   async registrar2(usuario: UsuarioInterface):Promise<UsuarioInterface | any>{
     try {

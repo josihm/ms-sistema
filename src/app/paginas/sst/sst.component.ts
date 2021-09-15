@@ -1,4 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { Departamento } from 'src/app/recursos/modelos/departamento.class';
+import { Horas } from 'src/app/recursos/modelos/horas.class';
+import { SolicitudSTI } from 'src/app/recursos/modelos/solicitudesst.interface';
+import { UsuarioInterface } from 'src/app/recursos/modelos/usuario.interface';
+import { AuthService } from 'src/app/recursos/servicios/auth.service';
+import { GenerarPDFService } from 'src/app/recursos/servicios/generar-pdf.service';
+import { ServiciosService } from 'src/app/recursos/servicios/servicios.service';
+import { SstService } from 'src/app/recursos/servicios/sst.service';
+import { ValidarFechas } from 'src/app/recursos/servicios/validarFechas';
 
 @Component({
   selector: 'app-sst',
@@ -6,10 +19,369 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sst.component.scss']
 })
 export class SstComponent implements OnInit {
+  usuarioActual$: UsuarioInterface | any;
+  deptoSesion: Departamento = new Departamento();
+  
+  ssti!: SolicitudSTI | any;
+  folio!: number;
 
-  constructor() { }
+  formularioSST!: FormGroup;
+  private isEmail = /\S+@+\S+\.\S/;
+  private isExtensiones = /\d/;
 
-  ngOnInit(): void {
+  horas: Horas[]=[
+    { value: '07:00', viewValue: '07:00'},
+    { value: '07:15', viewValue: '07:15'},
+    { value: '07:30', viewValue: '07:30'},
+    { value: '07:45', viewValue: '07:45'},
+    { value: '08:00', viewValue: '08:00'},
+    { value: '08:15', viewValue: '08:15'},
+    { value: '08:30', viewValue: '08:30'},
+    { value: '08:45', viewValue: '08:45'},
+    { value: '09:00', viewValue: '09:00'},
+    { value: '09:15', viewValue: '09:15'},
+    { value: '09:30', viewValue: '09:30'},
+    { value: '09:45', viewValue: '09:45'},
+    { value: '10:00', viewValue: '10:00'},
+    { value: '10:15', viewValue: '10:15'},
+    { value: '10:30', viewValue: '10:30'},
+    { value: '10:45', viewValue: '10:45'},
+    { value: '11:00', viewValue: '11:00'},
+    { value: '11:15', viewValue: '11:15'},
+    { value: '11:30', viewValue: '11:30'},
+    { value: '11:45', viewValue: '11:45'},
+    { value: '12:00', viewValue: '12:00'},
+    { value: '12:15', viewValue: '12:15'},
+    { value: '12:30', viewValue: '12:30'},
+    { value: '12:45', viewValue: '12:45'},
+    { value: '13:00', viewValue: '13:00'},
+    { value: '13:15', viewValue: '13:15'},
+    { value: '13:30', viewValue: '13:30'},
+    { value: '13:45', viewValue: '13:45'},
+    { value: '14:00', viewValue: '14:00'},
+    { value: '14:15', viewValue: '14:15'},
+    { value: '14:30', viewValue: '14:30'},
+    { value: '14:45', viewValue: '14:45'},
+    { value: '15:00', viewValue: '15:00'},
+    { value: '15:15', viewValue: '15:15'},
+    { value: '15:30', viewValue: '15:30'},
+    { value: '15:45', viewValue: '15:45'},
+    { value: '16:00', viewValue: '16:00'},
+    { value: '16:15', viewValue: '16:15'},
+    { value: '16:30', viewValue: '16:30'},
+    { value: '16:45', viewValue: '16:45'},
+    { value: '17:00', viewValue: '17:00'},
+    { value: '17:15', viewValue: '17:15'},
+    { value: '17:30', viewValue: '17:30'},
+    { value: '17:45', viewValue: '17:45'},
+    { value: '18:00', viewValue: '18:00'},
+    { value: '18:15', viewValue: '18:15'},
+    { value: '18:30', viewValue: '18:30'},
+    { value: '18:45', viewValue: '18:45'},
+    { value: '19:00', viewValue: '19:00'},
+    { value: '19:15', viewValue: '19:15'},
+    { value: '19:30', viewValue: '19:30'},
+    { value: '19:45', viewValue: '19:45'},
+    { value: '20:00', viewValue: '20:00'},
+    { value: '20:15', viewValue: '20:15'},
+    { value: '20:30', viewValue: '20:30'},
+    { value: '20:45', viewValue: '20:45'},
+    { value: '21:00', viewValue: '21:00'},
+    { value: '21:15', viewValue: '21:15'},
+    { value: '21:30', viewValue: '21:30'},
+    { value: '21:45', viewValue: '21:45'},
+  ]
+
+  //dataSource = new MatTableDataSource<FormGroup>(this.datos);
+  
+  matcher = new ErrorStateMatcher();
+
+  constructor(private router: Router, private authServicio: AuthService,
+              public servicios: ServiciosService,
+              private stServicio: SstService,
+              private dialogRef: MatDialogRef<SstComponent>,
+              @Inject(MAT_DIALOG_DATA) public datos: any,
+              //private fb:FormBuilder
+              ) { 
+    //this.initForm();
+    this.usuarioActual$ = this.authServicio.afAuth.user;
+    
   }
 
+  isErrorState(control: FormControl, form: FormGroupDirective | NgForm | null): boolean {
+    //throw new Error('Method not implemented.');
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+  
+  async ngOnInit(): Promise<void> {
+    this.deptoSesion = JSON.parse(String(localStorage.getItem("deptoSesion")));
+    if(this.deptoSesion.uid==undefined){
+      this.router.navigate(['login']);
+    }else{
+      //this.servicios.selectedST.departamento_id = await this.authServicio.getIdDeptoXdepartamento(this.servicios.selectedST.departamento_id);
+      //this.servicios.selectedST = await this.stServicio.getSST_folio_async(this.servicios.selectedST.folio);
+      if (this.servicios.selectedST.folio==""||undefined||null){
+        //CUANDO VIENE VACíO o es nuevo desde la lista
+        console.log("PRESIONó en el botón NUEVO o ADD")
+        this.limpiarFormulario();//MODIFICADO EN LA NOCHE DEL 13 de SEP 2021
+      }else{
+        this.ssti = await this.stServicio.getSST_folio_async(this.servicios.selectedST.folio) 
+                || await this.stServicio.getSST_id_async(this.servicios.selectedST.id)
+                || '';
+        this.servicios.selectedST = this.ssti;
+        
+        var salidast = ValidarFechas.convertirFechaStringToMatPicker(this.servicios.selectedST.salidaSt)
+        var regresost = ValidarFechas.convertirFechaStringToMatPicker(this.servicios.selectedST.regresoSt);
+
+        this.servicios.selectedST.salidaSt =  ValidarFechas.parseDateToStringWithFormat(salidast);
+        this.servicios.selectedST.regresoSt = ValidarFechas.parseDateToStringWithFormat(regresost);
+        
+        //console.log("datos traidos de la lista this.formularioSST.value: ", this.formularioSST.value);
+        console.log("datos traidos de la lista this.servicios.selectedSt: ", this.servicios.selectedST);
+        console.log("datos traidos de la lista this.ssti: ", this.ssti);
+        console.log("Convertir fecha string a Date: ", ValidarFechas.convertirFechaStringToMatPicker(this.ssti.salidaSt));
+      }
+      
+    }
+  }
+
+  /*
+  private initForm():void{
+    
+    this.formularioSST = this.fb.group({
+      /*pasajeros: ['',[Validators.required]],
+      destino: ['',[Validators.required, Validators.pattern(this.isEmail)]],
+      nPasajeros:['',[Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.isExtensiones)]],
+      salidaSt: ['',[Validators.required]]
+
+      //id: new FormControl(['']),
+      pasajeros: new FormControl([''],[Validators.required]),
+      destino: new FormControl([''],[Validators.required]),
+      fechaSol: new FormControl(['']),
+      nPasajeros: new FormControl([''],[Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.isExtensiones)]),
+      salidaSt: new FormControl([''],[Validators.required]),
+      horaS: new FormControl([''],[Validators.required]),
+      regresoSt: new FormControl(['']),
+      horaR: new FormControl(['']),
+      tServicio: new FormControl([''],[Validators.required]),
+      tTransporte: new FormControl([''],[Validators.required]),
+      infAd:new FormControl(['']),
+    }); 
+  }
+  */
+
+  /*guardar(){
+    if (this.servicios.selectedST.id == null
+      || this.servicios.selectedST.id == ''){
+        this.solicitarST();
+    }else{
+      //this.formularioSST.value.salidaSt = ValidarFechas.fechaToString(new Date(Date.parse(this.formularioSST.value.salidaSt)));
+      //this.formularioSST.value.regresoSt = ValidarFechas.fechaToString(new Date(Date.parse(this.formularioSST.value.regresoSt)));
+      this.servicios.editSST(this.formularioSST.value);
+    }
+    this.close();
+  }*/
+
+  async guardar():Promise<void>{
+
+    if (this.servicios.selectedST.id == null
+      || this.servicios.selectedST.id == ''
+      || this.servicios.selectedST.id == undefined){
+        //
+        console.log("guardar() IF this.servicios.selectedST: ", this.servicios.selectedST);
+        //console.log("guardar() IF this.formularioSST.value: ", this.formularioSST.value);
+        this.ssti = this.servicios.selectedST;
+        this.formatearFechas();
+        this.ssti.departamento_id = this.deptoSesion.id;
+
+        if(this.validar(this.ssti)){
+          this.folio = await this.stServicio.getNumeroFolioSiguiente_async();
+          this.ssti.folio = this.folio;
+          console.log("Proceder a actualizar la solicitud !!!", this.ssti);
+          console.log("del Departamento !!!", this.deptoSesion);
+          await this.stServicio.addUpdate(this.ssti);
+          alert("Registro actualizado, verificar!!!");
+          GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
+          //this.limpiarFormulario();
+          this.router.navigate(['solicitudes-st']);
+        }else{
+          alert("Algo sucedió mal");
+        }
+        //this.stServicio.addUpdate(this.servicios.selectedST);
+    }else{
+      //this.formularioSST.value.salidaSt = ValidarFechas.fechaToString(new Date(Date.parse(this.formularioSST.value.salidaSt)));
+      //this.formularioSST.value.regresoSt = ValidarFechas.fechaToString(new Date(Date.parse(this.formularioSST.value.regresoSt)));
+      //this.servicios.editSST(this.formularioSST.value);
+      //this.servicios.selectedST.departamento_id = await this.authServicio.getIdDeptoXdepartamento(this.servicios.selectedST.departamento_id);
+      console.log("guardar() ELSE this.servicios.selectedST: ", this.servicios.selectedST);
+      //console.log("guardar() ELSE this.formularioSST.value: ", this.formularioSST.value);
+      
+      this.formatearFechas();
+      
+      if (this.validar(this.ssti)){
+        if(this.ssti.folio!=null || this.ssti.folio!="" 
+            && (this.deptoSesion.uid!=null || this.deptoSesion.uid!=undefined)){
+          console.log("Proceder a actualizar la solicitud !!!", this.ssti);
+          console.log("del Departamento !!!", this.deptoSesion);
+          await this.stServicio.addUpdate(this.ssti);
+          alert("Registro actualizado, verificar!!!");
+          GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
+          this.limpiarFormulario();
+        }else{
+          alert("Fechas no válidas!!!");
+        }
+      }
+
+
+      //this.stServicio.addUpdate(this.ssti);
+    }
+    this.close();
+  }
+
+  async validar(ssti: SolicitudSTI):Promise<boolean>{
+    const vf: ValidarFechas = new ValidarFechas(this.ssti.salidaSt, this.ssti.regresoSt, this.ssti.fechaSol);
+    if (vf.validarFechas() 
+        && await this.stServicio.getSTColeccionFiltradaBoolean_async(ssti)){
+      alert("Fechas válidas y con espacio para asignar");
+      return await true;
+    }else{
+      alert("No se puede validar la fecha de salida: Menos de 3 días para la salida. Favor de cancelar Solicitud o modificar fecha");
+      return await false;
+    }
+  }
+
+  formatearFechas(){
+    this.servicios.selectedST.fechaSol = ValidarFechas.parseDateToStringWithFormat(new Date());
+      var salst = Date.parse(this.servicios.selectedST.salidaSt);
+      var regst = Date.parse(this.servicios.selectedST.regresoSt);
+      var hoy = new Date();
+      var dateSalida = this.servicios.selectedST.salidaSt;
+      var dateRegreso = this.servicios.selectedST.regresoSt;
+
+      this.servicios.selectedST.salidaSt = ValidarFechas.fechaToString(new Date(salst));
+      this.servicios.selectedST.regresoSt = ValidarFechas.fechaToString(new Date(regst));
+
+      this.ssti = this.servicios.selectedST;
+      this.ssti.fechaSolImp = ValidarFechas.parseDateToStringWithFormat_Imprimir(new Date());
+      this.ssti.dateSalida = dateSalida;
+      this.ssti.dateRegreso = dateRegreso;
+      this.ssti.dateFechaSol = new Date(hoy);
+  }
+
+  asignarFolio(){}
+
+  async solicitarST(){
+    this.formularioSST.value.fechaSol = ValidarFechas.parseDateToStringWithFormat(new Date());
+    var salst = Date.parse(this.formularioSST.value.salidaSt);
+    var regst = Date.parse(this.formularioSST.value.regresoSt);
+    var hoy = new Date();
+
+    var dateSalida = this.formularioSST.value.salidaSt;
+    var dateRegreso = this.formularioSST.value.regresoSt;
+    var dateFechaSol = hoy;
+
+    this.formularioSST.value.salidaSt = ValidarFechas.fechaToString(new Date(salst));
+    this.formularioSST.value.regresoSt = ValidarFechas.fechaToString(new Date(regst));
+    
+    this.ssti = this.formularioSST.value;
+    this.ssti.fechaSolImp = ValidarFechas.parseDateToStringWithFormat_Imprimir(new Date());
+    this.ssti.dateSalida = dateSalida;
+    this.ssti.dateRegreso = dateRegreso;
+    this.ssti.dateFechaSol = new Date(hoy);
+
+    console.log('this.sst: ', this.ssti);
+    console.log('this.formularioSST: ', this.formularioSST.value);
+    console.log('this.servicios.selectedST: ', this.servicios.selectedST);
+    
+    this.folio = await this.servicios.getFolioST_async();
+
+    console.log("ANTES del async await folio: ", this.folio);
+
+    await this.servicios.getFolioST().subscribe((datos: { size: any; })=>{
+      this.folio = datos.size
+      console.log("folio: ", this.folio);
+      this.verificarDisponibilidadyFechas(this.ssti, this.folio+1);  
+    });
+
+    console.log("después del async await folio: ", this.folio);
+
+    console.log("OTRAS VEZ this.sst: ", this.ssti);
+    
+
+    //this.verificarDisponibilidadyFechas(this.sst);
+
+      
+    
+    
+    //this.limpiarFormulario();
+    this.formularioSST.reset();
+  }
+  
+  close(): void{
+    this.dialogRef.close();
+    this.router.navigate(['solicitudes-st']);
+    //this.limpiarFormulario();
+  }
+
+  limpiarFormulario(){
+    this.servicios.selectedST.id='',
+    this.servicios.selectedST.departamento_id = '';
+    this.servicios.selectedST.folio = '';
+    this.servicios.selectedST.destino = '';
+    this.servicios.selectedST.salidaSt = '';
+    this.servicios.selectedST.regresoSt = '';
+    this.servicios.selectedST.horaS = '';
+    this.servicios.selectedST.horaR = '';
+    this.servicios.selectedST.fechaSol = '';
+    this.servicios.selectedST.tServicio = '';
+    this.servicios.selectedST.tTransporte = '';
+    this.servicios.selectedST.infAd = '';
+    this.servicios.selectedST.pasajeros = '';
+    this.servicios.selectedST.nPasajeros = '';
+  }
+
+  isValid(campo: string):string{
+    const validarCampo = this.formularioSST.get(campo);
+    return (!validarCampo?.valid && validarCampo?.touched)
+      ? 'es inválido' : validarCampo?.touched ? 'es válido' :  '';
+  }
+
+  async verificarDisponibilidadyFechas(ssti:SolicitudSTI, folio: number){
+    
+    const vf: ValidarFechas = new ValidarFechas(ssti.salidaSt, ssti.regresoSt, ssti.fechaSol);
+    
+    console.log( "vf.getDateSalida() ", vf.getDateSalida() );
+    console.log( "ssti.salidaSt: ", ssti.salidaSt);
+    
+    console.log( "vf.getDateRegreso() ", vf.getDateRegreso() );
+    console.log( "ssti.regresoSt: ", ssti.regresoSt);
+    
+    console.log( "vf.getDateFechaSol() ", vf.getDateFechaSol() );
+    console.log( "ssti.fechaSol: ", ssti.fechaSol);
+
+    if (vf.validarFechas()){
+      alert("FECHAS VáLIDAS");
+      if(this.servicios.getSTColeccion_async(ssti)){
+        alert("Se registrará e imprimirá..."+ssti)
+        if(this.servicios.getFolioST_async!=null && this.deptoSesion.uid!=undefined ){
+          ssti.folio = folio.toString();
+          //console.log("vr.ValidarFechas() IF -> folio: ", folio);
+          //console.log("ssti: ", ssti);
+          console.log("deptoSesion.id: ", this.deptoSesion.id);
+          ssti.departamento_id = this.deptoSesion.id;
+          console.log("OTRAS VEZZZZZZ this.sst: ", ssti);
+          await this.servicios.addSST_async(ssti, '', this.deptoSesion);
+        }else{
+          alert("INICIE SESION");
+        }
+      }else{
+        alert("no hay disponibilidad");
+      }
+    }else{
+      console.log("Diferencia entre días: "+vf.getDiferencia());
+      console.log("Día de salida: "+ vf.getDiaDeLaSemana());
+      console.log("FECHAS NO VALIDADAS");
+    }
+  }
 }

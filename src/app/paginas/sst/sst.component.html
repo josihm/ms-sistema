@@ -1,1 +1,422 @@
-<p>sst works!</p>
+<div class="container">
+    <div class="card text-white bg-info mb-3" style="max-width: auto;">
+        <div class="card-header text-center">
+            <h3>SOLICITUD DE SERVICIO DE TRANSPORTE</h3>
+        </div>
+    </div>
+    <hr>
+    <!--form [formGroup]="this.formularioSST"-->
+    <!--form (ngSubmit)="guardar()" [formGroup]="this.formularioSST"-->
+    <!--form (ngSubmit)="guardar()"-->
+    <!--form-->
+        <fieldset>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input type="text" 
+                            matInput
+                            id="isValid"
+                            [(ngModel)]="this.servicios.selectedST.pasajeros"
+                            
+                            placeholder="Nombre(s) del(los) pasajero(s)"
+                            required>
+                </mat-form-field><br>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput type="text"
+                            class="form-control" 
+                            id="isValid"
+                            placeholder="Destino (dirección completa)"
+                            [(ngModel)]="this.servicios.selectedST.destino"
+                            
+                            required>
+                </mat-form-field><br>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput type="text"
+                            class="form-control" 
+                            id="isValid"
+                            placeholder="Número de pasajeros"
+                            [(ngModel)]='this.servicios.selectedST.nPasajeros'
+                            
+                            required>
+                </mat-form-field>
+            </div>
+            <hr>
+        </fieldset>
+
+        <fieldset>
+            <h5 class="text-center text-success">Fecha y hora de salida</h5>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput
+                        [matDatepicker]="picker"
+                        [(ngModel)]='this.servicios.selectedST.salidaSt'>
+                        
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <br>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <mat-label>HORA DE SALIDA</mat-label>
+                    <!--mat-select [(value)]='this.formularioSST.horaS'-->
+                    <mat-select [(value)]='this.servicios.selectedST.horaS'
+                                [(ngModel)]='this.servicios.selectedST.horaS'
+                                
+                                required>
+                        <mat-option *ngFor="let hora of horas" [value]="hora.value">
+                        {{hora.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <br>
+            <h5 class="text-center text-danger">Fecha y hora de retorno</h5>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput [matDatepicker]="picker2"
+                        [(ngModel)]='this.servicios.selectedST.regresoSt'
+                        />
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <mat-label>HORA DE REGRESO</mat-label>
+                    <mat-select [(value)]='this.servicios.selectedST.horaR'
+                                [(ngModel)]='this.servicios.selectedST.horaR'
+                                
+                                required>
+                        <mat-option *ngFor="let hora of horas" [value]="hora.value">
+                            {{hora.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field><br>
+            </div>
+        </fieldset>
+        
+        <fieldset>
+            <div class="form-group">
+                <br>
+                <mat-radio-group class="form-control"
+                                [(ngModel)]='this.servicios.selectedST.tServicio'
+                                
+                                required>TIPO DE SERVICIO:&nbsp;&nbsp;
+                    <mat-radio-button value="LOCAL">LOCAL</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <mat-radio-button value="FORÁNEO">FORÁNEO</mat-radio-button>
+                </mat-radio-group><br>
+                <mat-radio-group class="form-control"
+                                [(ngModel)]='this.servicios.selectedST.tTransporte'
+                                
+                                required>TIPO DE TRANPORTE:&nbsp;&nbsp;
+                    <mat-radio-button value="PASAJEROS">PASAJEROS</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <mat-radio-button value="CARGA">CARGA</mat-radio-button>
+                </mat-radio-group><br>
+
+                <mat-form-field class="form-control">
+                    <textarea matInput
+                            placeholder="Información adicional"
+                            cdkTextareaAutosize
+                            #autosize="cdkTextareaAutosize"
+                            cdkAutosizeMinRows="5"
+                            cdkAutosizeMaxRows="5"
+                            [(ngModel)]='this.servicios.selectedST.infAd'
+                            ></textarea>
+                </mat-form-field>
+            </div>
+        </fieldset>
+        
+        <br>
+        <div class="d-grid gap-2">
+            <button class="btn btn-lg btn-outline-info btn-block" (click)="guardar()">
+                <mat-icon>save</mat-icon>
+            </button>
+        </div>
+    <!--/form-->
+</div>
+
+
+
+
+<!--div class="container">
+    <div class="card text-white bg-info mb-3" style="max-width: auto;">
+        <div class="card-header text-center">
+            <h3>SOLICITUD DE SERVICIO DE TRANSPORTE</h3>
+        </div>
+    </div>
+    <hr>
+    <form [formGroup]="this.formularioSST"-->
+    <!--form (ngSubmit)="guardar()" [formGroup]="this.formularioSST"-->
+    <!--form (ngSubmit)="guardar()"-->
+    <!--form-->
+        <!--fieldset>
+            <div class="form-group">
+                <input type="text" 
+                        class="form-control" 
+                        id="isValid"
+                        [(ngModel)]="this.servicios.selectedST.pasajeros"
+                        formControlName = "pasajeros"
+                        placeholder="Nombre(s) del(los) pasajero(s)"
+                        required><br>
+            </div>
+            <div class="form-group">
+                <input type="text"
+                        class="form-control" 
+                        id="isValid"
+                        placeholder="Destino (dirección completa)"
+                        [(ngModel)]="this.servicios.selectedST.destino"
+                        formControlName = "destino"
+                        required><br>
+            </div>
+            <div class="form-group">
+                <input type="text"
+                        class="form-control" 
+                        id="isValid"
+                        placeholder="Número de pasajeros"
+                        [(ngModel)]='this.servicios.selectedST.nPasajeros'
+                        formControlName = "nPasajeros"
+                        required>
+            </div>
+            <hr>
+        </fieldset>
+
+        <fieldset>
+            <h5 class="text-center text-success">Fecha y hora de salida</h5>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput
+                        [matDatepicker]="picker"
+                        [(ngModel)]='this.servicios.selectedST.salidaSt'
+                        formControlName = "salidaSt">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <br>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <mat-label>HORA DE SALIDA</mat-label>
+                    <mat-select [(value)]='this.formularioSST.horaS'-->
+                    <!--mat-select [(value)]='this.servicios.selectedST.horaS'
+                                [(ngModel)]='this.servicios.selectedST.horaS'
+                                formControlName = "horaS"
+                                required>
+                        <mat-option *ngFor="let hora of horas" [value]="hora.value">
+                        {{hora.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <br>
+            <h5 class="text-center text-danger">Fecha y hora de retorno</h5>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput [matDatepicker]="picker2"
+                        [(ngModel)]='this.servicios.selectedST.regresoSt'
+                        formControlName = "regresoSt"/>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <mat-label>HORA DE REGRESO</mat-label>
+                    <mat-select [(value)]='this.servicios.selectedST.horaR'
+                                [(ngModel)]='this.servicios.selectedST.horaR'
+                                formControlName = "horaR"
+                                required>
+                        <mat-option *ngFor="let hora of horas" [value]="hora.value">
+                            {{hora.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field><br>
+            </div>
+        </fieldset>
+        
+        <fieldset>
+            <div class="form-group">
+                <br>
+                <mat-radio-group class="form-control"
+                                [(ngModel)]='this.servicios.selectedST.tServicio'
+                                formControlName = "tServicio"
+                                required>TIPO DE SERVICIO:&nbsp;&nbsp;
+                    <mat-radio-button value="LOCAL">LOCAL</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <mat-radio-button value="FORÁNEO">FORÁNEO</mat-radio-button>
+                </mat-radio-group><br>
+                <mat-radio-group class="form-control"
+                                [(ngModel)]='this.servicios.selectedST.tTransporte'
+                                formControlName = "tTransporte"
+                                required>TIPO DE TRANPORTE:&nbsp;&nbsp;
+                    <mat-radio-button value="PASAJEROS">PASAJEROS</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <mat-radio-button value="CARGA">CARGA</mat-radio-button>
+                </mat-radio-group><br>
+
+                <mat-form-field class="form-control">
+                    <textarea matInput
+                            placeholder="Información adicional"
+                            cdkTextareaAutosize
+                            #autosize="cdkTextareaAutosize"
+                            cdkAutosizeMinRows="5"
+                            cdkAutosizeMaxRows="5"
+                            [(ngModel)]='this.servicios.selectedST.infAd'
+                            formControlName = "infAd"></textarea>
+                </mat-form-field>
+            </div>
+        </fieldset>
+        
+        <br>
+        <div class="d-grid gap-2">
+            <button class="btn btn-lg btn-outline-success btn-block" (click)="guardar()">
+                <mat-icon>save</mat-icon>
+            </button>
+        </div>
+    <!/form-->
+<!--/div-->
+
+
+
+
+
+
+
+
+
+<!--div class="container">
+    <hr>
+    <h2>- - -    SOLICITUD DE SERVICIO DE TRANSPORTE    - - -</h2>
+    <hr>
+    <form (ngSubmit)="guardar()" [formGroup]="this.formularioSST">
+        <fieldset>
+            <div class="form-group">
+                <input type="text"
+                        class="form-control" 
+                        id="isValid"
+                        placeholder="Nombre(es) del(los) pasajero(s)"
+                        ([ngModel])='this.servicios.selectedST.pasajeros'
+                        formControlName="this.formularioSST.pasajeros"
+                        required><br>
+            </div>
+            <div class="form-group">
+                <input type="text"
+                        class="form-control" 
+                        id="isValid"
+                        placeholder="Destino (dirección completa)"
+                        ([ngModel])='this.sst.destino'
+                        formControlName="this.formularioSST.destino"
+                        required><br>
+            </div>
+            <div class="form-group">
+                <input type="text"
+                        class="form-control" 
+                        id="isValid"
+                        placeholder="Número de pasajeros"
+                        ([ngModel])='this.sst.nPasajeros'
+                        formControlName="this.formularioSST.nPasajeros"
+                        required>
+            </div>
+            <hr>
+        </fieldset>
+
+        <fieldset>
+            <h5 class="text-center text-success">Fecha y hora de salida</h5>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput formControlName="this.formularioSST.salidaSt"
+                        [matDatepicker]="picker"
+                        ([ngModel])='this.servicios.selectedST.salidaSt'>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <br>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <mat-label>HORA DE SALIDA</mat-label>
+                    
+                    <mat-select [(value)]='this.servicios.selectedST.horaS'
+                                formControlName="this.formularioSST.horaS"
+                                required>
+                        <mat-option *ngFor="let hora of horas" [value]="hora.value">
+                        {{hora.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <br>
+            <h5 class="text-center text-danger">Fecha y hora de retorno</h5>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <input matInput [matDatepicker]="picker2"
+                            ([ngModel])='this.servicios.selectedST.regresoSt'
+                            formControlName="this.formularioSST.regresoSt"/>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="form-control">
+                    <mat-label>HORA DE REGRESO</mat-label>
+                    <mat-select [(value)]='this.servicios.selectedST.horaR'
+                                formControlName="this.formularioSST.horaR"
+                                required>
+                        <mat-option *ngFor="let hora of horas" [value]="hora.value">
+                            {{hora.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field><br>
+            </div>
+        </fieldset>
+        
+        <fieldset>
+            <div class="form-group">
+                <br>
+                <mat-radio-group class="form-control"
+                                ([ngModel])='this.servicios.selectedST.tServicio'
+                                formControlName="this.formularioSST.tServicio"
+                                required>TIPO DE SERVICIO:&nbsp;&nbsp;
+                    <mat-radio-button value="LOCAL">LOCAL</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <mat-radio-button value="FORÁNEO">FORÁNEO</mat-radio-button>
+                </mat-radio-group><br>
+                <mat-radio-group class="form-control"
+                                ([ngModel])='this.servicios.selectedST.tTransporte'
+                                formControlName="this.formularioSST.tTransporte"
+                                required>TIPO DE TRANPORTE:&nbsp;&nbsp;
+                    <mat-radio-button value="PASAJEROS">PASAJEROS</mat-radio-button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <mat-radio-button value="CARGA">CARGA</mat-radio-button>
+                </mat-radio-group><br>
+
+                <mat-form-field class="form-control">
+                    <textarea matInput
+                            placeholder="Información adicional"
+                            cdkTextareaAutosize
+                            #autosize="cdkTextareaAutosize"
+                            cdkAutosizeMinRows="5"
+                            cdkAutosizeMaxRows="5"
+                            ([ngModel])='this.servicios.selectedST.infAd'
+                            formControlName="this.formularioSST.infAd"></textarea>
+                </mat-form-field>
+            </div>
+        </fieldset>
+        
+        <br>
+        <div class="d-grid gap-2">
+            <button class="btn btn-lg btn-outline-success btn-block"
+                    (click)="guardar()">
+                <mat-icon>save</mat-icon>
+            </button>
+        </div>
+    </form>
+</div-->

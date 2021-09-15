@@ -69,6 +69,8 @@ export class ServiciosService {
 
   sstss: Observable<SolicitudSTI[]>;
 
+  private usuario$: Observable<UsuarioInterface> | any;
+
   constructor(private afs: AngularFirestore) { 
     this.coleccionUsuarios = this.afs.collection<UsuarioInterface>('usuarios');
     
@@ -112,6 +114,19 @@ export class ServiciosService {
   allSSCP(){return this.sscps;}
 
   async guardarUsuario(usuario: UsuarioInterface, idUsuario:string|null|"null"|''):Promise<void>{
+    return new Promise(async (resolve,reject) => {
+      try {
+        const id = idUsuario || this.afs.createId();
+        const data = { id, ...usuario};
+        const respuesta = await this.coleccionUsuarios.doc(id).set(data);
+        resolve(respuesta);
+      } catch (error) {
+        reject(error.message);
+      }
+    });
+  }
+
+  async guardarUsuarioPorFavorEnBD(usuario: UsuarioInterface, idUsuario:string|null|"null"|''):Promise<void>{
     return new Promise(async (resolve,reject) => {
       try {
         const id = idUsuario || this.afs.createId();

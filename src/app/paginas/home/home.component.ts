@@ -9,7 +9,7 @@ import { Departamento } from 'src/app/recursos/modelos/departamento.class';
 })
 export class HomeComponent implements OnInit {
   isLogged: boolean = false;
-  deptoSesion: Departamento = new Departamento;
+  deptoSesion: Departamento = new Departamento();
   constructor(private router: Router) { }
 
   ngOnInit(): void {

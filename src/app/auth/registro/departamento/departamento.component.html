@@ -1,1 +1,82 @@
-<p>departamento works!</p>
+<div class="card mt-2">
+    <div class="card-header">
+        DEPARTAMENTO - Registro
+    </div>
+    <div class="card-body">
+        <form (ngSubmit)="registrar()" [formGroup]="formularioRegistroDepartamento">
+            <div class="form-group col-md-12">
+                <input type="text" 
+                    class="form-control"
+                    placeholder="Departamento"
+                    formControlName="departamento"
+                    [class]="isValid('departamento')"/>
+                <div class="invalid-feedback">
+                    <span *ngIf="formularioRegistroDepartamento?.get('departamento')?.errors?.required">
+                        Campo requerido
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <input type="text"
+                    class="form-control"
+                    placeholder="Titular"
+                    formControlName="titular"
+                    [class]="isValid('titular')"/>
+            </div>
+            <div class="form-group col-md-12">
+                <input type="text"
+                    class="form-control"
+                    placeholder="Teléfono directo"
+                    formControlName="teldirecto"
+                    [class]="isValid('teldirecto')"/>
+            </div>
+            <div class="form-group ml-5">
+                Extensiones
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input type="text"
+                        class="form-control"
+                        placeholder="extensión 1"
+                        formControlName="ext"
+                        [class]="isValid('ext1')">
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="text"
+                        class="form-control"
+                        placeholder="extensión 2"
+                        formControlName="ext2"
+                        [class]="isValid('ext2')">
+                </div>
+            </div>
+            <hr>
+            <label class="ml-5">Datos de acceso al sistema</label>
+            <div class="form-group col-md-12">
+                <input type="email"
+                    class="form-control"
+                    placeholder="Correo electrónico"
+                    formControlName="correosind"
+                    [class]="isValid('correosind')">
+                <div class="invalid-feedback">
+                    <span *ngIf="formularioRegistroDepartamento?.get('departamento')?.errors?.required">
+                        Campo requerido
+                    </span>
+                </div>
+                <div class="invalid-feedback">
+                    <span *ngIf="formularioRegistroDepartamento?.get('departamento')?.errors?.pattern">
+                        Campo requerido
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <input type="password" class="form-control" placeholder="Contraseña" formControlName="psw"> 
+            </div>
+            <div class="form-group col-md-12">
+                <input type="password" class="form-control" placeholder="Confirma contraseña"> 
+            </div>
+            <div class="form-group col-md-12">
+                <button class="btn bg-dark btn-block text-light">Registrar</button>
+            </div>
+        </form>
+    </div>
+</div>

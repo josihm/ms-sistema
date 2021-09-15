@@ -1,1 +1,58 @@
-<p>registro works!</p>
+<div class="card mt-2">
+    <div class="card-header">
+        DEPARTAMENTO - Registro
+    </div>
+    <div class="card-body">
+        <form (ngSubmit)="registrar()" [formGroup]="formularioRegistroUsuario">
+            <div class="form-group col-md-12">
+                <input type="text" 
+                    class="form-control"
+                    placeholder="Nombre"
+                    formControlName="displayName"
+                    [class]="isValid('displayName')"/>
+                <div class="invalid-feedback">
+                    <span *ngIf="formularioRegistroUsuario.getError('displayName')?.errors?.required">
+                        Campo requerido
+                    </span>
+                </div>
+            </div>
+            
+            <div class="form-group col-md-12">
+                <input type="text"
+                    class="form-control"
+                    placeholder="Número de celular(opcional)"
+                    formControlName="phoneNumber"
+                    [class]="isValid('phoneNumber')"/>
+            </div>
+            <hr>
+            <label class="ml-5">Datos de acceso al sistema</label>
+            <div class="form-group col-md-12">
+                <input type="email"
+                    class="form-control"
+                    placeholder="Correo electrónico"
+                    formControlName="email"
+                    [class]="isValid('email')">
+                <div class="invalid-feedback">
+                    <span *ngIf="formularioRegistroUsuario?.get('email')?.errors?.required">
+                        Campo requerido
+                    </span>
+                </div>
+                
+            </div>
+            <div class="form-group col-md-12">
+                <input type="password" class="form-control" placeholder="Contraseña" formControlName="psw"> 
+                <div class="invalid-feedback">
+                    <span *ngIf="formularioRegistroUsuario?.get('psw')?.errors?.pattern">
+                        Campo requerido
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <input type="password" class="form-control" placeholder="Confirma contraseña"> 
+            </div><br>
+            <div class="form-group row">
+                <button class="btn btn-primary bg-info btn-block text-light" style="display: flex;align-items: center; justify-content: center;">Registrar</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,1 +1,104 @@
-<p>lista-st works!</p>
+<div class="container">
+    <div class="card text-white bg-info mb-3" style="max-width: auto;">
+      <div class="card-header text-center"><h4>Solicitudes de Servicios de Transportes</h4></div>
+    </div>
+    
+        <button mat-icon-button color="primary" alt="TODAS" (click)="ngOnInit()">
+          <mat-icon>list_all</mat-icon>
+        </button>
+        
+        <mat-form-field>
+            <mat-label>Filtro</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Fecha de solicitud, destino, salida, etc." #input/>
+        </mat-form-field>&nbsp;&nbsp;&nbsp;
+          
+        <button mat-icon-button color="primary" alt="HOY" (click)="sstHoy()">
+          <mat-icon>today</mat-icon>
+        </button>&nbsp;&nbsp;&nbsp;
+        <button mat-icon-button color="primary" (click)="sstMostla()">
+          <mat-icon>event</mat-icon>
+        </button>
+        <br>
+        <div class="example-container mat-elevation-z8">
+    
+          <table mat-table [dataSource]="dataSource" matSort>
+      
+            <!-- Position Column -->
+            <ng-container matColumnDef="folio">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> FOLIO </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 9px;"> {{element.folio}} </td>
+              <td mat-footer-cell *matFooterCellDef>TOTAL: </td>
+            </ng-container>
+        
+            <!-- Name Column -->
+            <ng-container matColumnDef="fechaSolicitud">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> FECHA DE SOLICITUD </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 9px;"> {{element.fechaSol}} </td>
+              <td mat-footer-cell *matFooterCellDef>{{ total() }}</td>
+            </ng-container>
+        
+            <!-- Weight Column -->
+            <ng-container matColumnDef="departamento_id">
+              <th mat-header-cell *matHeaderCellDef> DEPARTAMENTO </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 9px;"> {{element.departamento_id}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+        
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="destino">
+              <th mat-header-cell *matHeaderCellDef> DESTINO </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 9px;">&nbsp;&nbsp;&nbsp; {{element.destino}} </td>
+              <td mat-footer-cell *matFooterCellDef>  </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="salidaSt">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> &nbsp;&nbsp;&nbsp; SALIDA </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 9px;"> {{element.salidaSt}} {{element.horaS}} &nbsp;&nbsp;&nbsp;</td>
+              <td mat-footer-cell *matFooterCellDef>  </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="regresoSt">
+              <th mat-header-cell *matHeaderCellDef> REGRESO </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 8px;">&nbsp; {{element.regresoSt}} {{element.horaR}} &nbsp;</td>
+              <td mat-footer-cell *matFooterCellDef>  </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="tServicio">
+              <th mat-header-cell *matHeaderCellDef> SERVICIO </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 9px;"> &nbsp;&nbsp;&nbsp;{{element.tServicio}} </td>
+              <td mat-footer-cell *matFooterCellDef> </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="tTransporte">
+              <th mat-header-cell *matHeaderCellDef> &nbsp;&nbsp;&nbsp; TRANSPORTE </th>
+              <td mat-cell *matCellDef="let element" style="font-size: 9px;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{element.tTransporte}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+      
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                  <button mat-stroked-button color="primary" (click)="add()">
+                      <mat-icon>add</mat-icon>
+                  </button>
+              </th>
+              <td mat-cell *matCellDef="let element">
+              <button mat-button color="accent"(click)="editar(element)">
+                  <mat-icon>edit</mat-icon>
+              </button>&nbsp;
+              <button mat-button color="warn" (click)="imprimir(element)">
+                  <mat-icon>print</mat-icon>
+              </button>&nbsp;</td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No hay datos con ese filtro... "{{input.value}}"</td>
+            </tr>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+          </table>
+        </div>
+      
+    </div>

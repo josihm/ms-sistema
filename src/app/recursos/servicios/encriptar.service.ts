@@ -7,15 +7,22 @@ export class EncriptarService {
   private static txtcryp: string | undefined;
   private static txtdecryp: string | undefined;
 
-  static encrypt(psw: string):string{
+  static async encrypt(psw: string):Promise<string>{
     this.txtcryp = CryptoJS.AES.encrypt(psw.trim(),this.key.trim()).toString();
-    console.log('this.txtcryp', this.txtcryp);
-    return this.txtcryp;
+    return await this.txtcryp;
   }
     
-  static desencriptar(psw:string){
-    this.txtdecryp = CryptoJS.AES.decrypt(psw.trim(), this.key.trim()).toString(CryptoJS.enc.Utf8);
-    return this.txtdecryp;
+  static async desencriptar(psw:string):Promise<string>{
+    return new Promise(async(resuelve, rechaza)=>{
+      try {
+        this.txtdecryp = CryptoJS.AES.decrypt(psw.trim(), this.key.trim()).toString(CryptoJS.enc.Utf8);
+        return resuelve(this.txtdecryp) ;
+      } catch (error) {
+        return rechaza(error.message);
+      }
+    });
+
+    
   }
 }
 

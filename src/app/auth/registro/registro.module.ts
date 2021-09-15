@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { RegistroRoutingModule } from './registro-routing.module';
 import { RegistroComponent } from './registro.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [RegistroComponent],
   imports: [
     CommonModule,
-    RegistroRoutingModule
+    RegistroRoutingModule, ReactiveFormsModule
   ]
 })
 export class RegistroModule { }

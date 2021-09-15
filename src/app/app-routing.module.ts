@@ -6,7 +6,7 @@ const routes: Routes = [
   { path: 'home', loadChildren: () => import('./paginas/home/home.module').then(m => m.HomeModule) },
   { path: 'login', loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule) },
   { path: 'registro', loadChildren: () => import('./auth/registro/registro.module').then(m => m.RegistroModule) },
-  { path: 'registro', loadChildren: () => import('./auth/registro/departamento/departamento.module').then(m => m.DepartamentoModule) },
+  { path: 'registroDepto', loadChildren: () => import('./auth/registro/departamento/departamento.module').then(m => m.DepartamentoModule) },
   { path: 'solicitud-st', loadChildren: () => import('./paginas/sst/sst.module').then(m => m.SstModule) }, 
   { path: 'solicitudes-st', loadChildren: () => import('./paginas/sst/lista-st/lista-st.module').then(m => m.ListaStModule) },
   { path: 'solicitudes-sc', loadChildren: () => import('./paginas/ssc/lista-sc/lista-sc.module').then(m => m.ListaScModule) },
