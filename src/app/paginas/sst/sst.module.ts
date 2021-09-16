@@ -11,7 +11,7 @@ import { MatModule } from 'src/app/recursos/material/mat.module';
   declarations: [SstComponent],
   imports: [
     CommonModule,
-    SstRoutingModule, ReactiveFormsModule, FormsModule, MatModule
+    SstRoutingModule, MatModule, FormsModule, ReactiveFormsModule,
   ]
 })
 export class SstModule { }

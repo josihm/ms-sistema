@@ -139,7 +139,7 @@ export class SstService {
   }
 
   async getSTColeccionFiltradaBoolean_async(ssti: SolicitudSTI):Promise<boolean>{
-    return await this.coleccionSST.ref
+    return await this.coleccionSST
       .where("salidaSt", "==", ssti.salidaSt)
       .where("horaS", "==", ssti.horaS).get()
       .then(async (query: any[]) => {

@@ -13,11 +13,12 @@ import { ServiciosService } from 'src/app/recursos/servicios/servicios.service';
 import { SstService } from 'src/app/recursos/servicios/sst.service';
 import { ValidarFechas } from 'src/app/recursos/servicios/validarFechas';
 
-@Component({
+/*@Component({
   selector: 'app-sst',
   templateUrl: './sst.component.html',
   styleUrls: ['./sst.component.scss']
-})
+})*/
+
 export class SstComponent implements OnInit {
   usuarioActual$: UsuarioInterface | any;
   deptoSesion: Departamento = new Departamento();
@@ -103,8 +104,11 @@ export class SstComponent implements OnInit {
               private stServicio: SstService,
               private dialogRef: MatDialogRef<SstComponent>,
               @Inject(MAT_DIALOG_DATA) public datos: any,
+              //private fb:FormBuilder
               ) { 
+    //this.initForm();
     this.usuarioActual$ = this.authServicio.afAuth.user;
+    
   }
 
   isErrorState(control: FormControl, form: FormGroupDirective | NgForm | null): boolean {
@@ -145,6 +149,43 @@ export class SstComponent implements OnInit {
     }
   }
 
+  /*
+  private initForm():void{
+    
+    this.formularioSST = this.fb.group({
+      /*pasajeros: ['',[Validators.required]],
+      destino: ['',[Validators.required, Validators.pattern(this.isEmail)]],
+      nPasajeros:['',[Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.isExtensiones)]],
+      salidaSt: ['',[Validators.required]]
+
+      //id: new FormControl(['']),
+      pasajeros: new FormControl([''],[Validators.required]),
+      destino: new FormControl([''],[Validators.required]),
+      fechaSol: new FormControl(['']),
+      nPasajeros: new FormControl([''],[Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.isExtensiones)]),
+      salidaSt: new FormControl([''],[Validators.required]),
+      horaS: new FormControl([''],[Validators.required]),
+      regresoSt: new FormControl(['']),
+      horaR: new FormControl(['']),
+      tServicio: new FormControl([''],[Validators.required]),
+      tTransporte: new FormControl([''],[Validators.required]),
+      infAd:new FormControl(['']),
+    }); 
+  }
+  */
+
+  /*guardar(){
+    if (this.servicios.selectedST.id == null
+      || this.servicios.selectedST.id == ''){
+        this.solicitarST();
+    }else{
+      //this.formularioSST.value.salidaSt = ValidarFechas.fechaToString(new Date(Date.parse(this.formularioSST.value.salidaSt)));
+      //this.formularioSST.value.regresoSt = ValidarFechas.fechaToString(new Date(Date.parse(this.formularioSST.value.regresoSt)));
+      this.servicios.editSST(this.formularioSST.value);
+    }
+    this.close();
+  }*/
+
   async guardar():Promise<void>{
 
     if (this.servicios.selectedST.id == null
@@ -154,35 +195,22 @@ export class SstComponent implements OnInit {
         console.log("guardar() IF this.servicios.selectedST: ", this.servicios.selectedST);
         //console.log("guardar() IF this.formularioSST.value: ", this.formularioSST.value);
         this.ssti = this.servicios.selectedST;
-        
-        console.log("this.ssti: ", this.ssti);
-
         this.formatearFechas();
-
-
         this.ssti.departamento_id = this.deptoSesion.id;
-
-        console.log("antes del async boolena this.ssti: ", this.ssti);
-
-        this.validaFecha_async = await this.stServicio.getSTColeccionFiltradaBoolean_async(this.ssti);
-
-        console.log("valida: ", this.validaFecha_async);
-        
-        if(this.validaFecha_async){
-
+        const valida = await this.validar(this.ssti);
+        console.log("valida: ", valida);
+        if(valida){
           this.folio = await this.stServicio.getNumeroFolioSiguiente_async();
           this.ssti.folio = this.folio;
-          console.log("Proceder a registrar la solicitud !!!", this.ssti);
+          console.log("Proceder a actualizar la solicitud !!!", this.ssti);
           console.log("del Departamento !!!", this.deptoSesion);
           await this.stServicio.addUpdate(this.ssti);
-          alert("Registro guardado, verificar!!!");
+          alert("Registro actualizado, verificar!!!");
           GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
           //this.limpiarFormulario();
           this.router.navigate(['solicitudes-st']);
-          this.close
         }else{
           alert("Algo sucedió mal");
-          this.close();
         }
         //this.stServicio.addUpdate(this.servicios.selectedST);
     }else{
@@ -194,13 +222,8 @@ export class SstComponent implements OnInit {
       //console.log("guardar() ELSE this.formularioSST.value: ", this.formularioSST.value);
       
       this.formatearFechas();
-
       this.validaFecha_async = await this.stServicio.getSTColeccionFiltradaBoolean_async(this.ssti);
-      //TIENE QUE MANDAR TRUE
-      console.log("primera validacion: ", this.validaFecha_async);
-      console.log("de la fecha de salida: ", this.ssti.salidaSt);
-      const otravalidacion = await this.validar(this.ssti);
-      if (otravalidacion){
+      if (await this.validar(this.ssti)){
         if(this.ssti.folio!=null || this.ssti.folio!="" 
             && (this.deptoSesion.uid!=null || this.deptoSesion.uid!=undefined)){
           console.log("Proceder a actualizar la solicitud !!!", this.ssti);
@@ -222,13 +245,13 @@ export class SstComponent implements OnInit {
         const vf: ValidarFechas = new ValidarFechas(this.ssti.salidaSt, this.ssti.regresoSt, this.ssti.fechaSol);
         
         if (vf.validarFechas() 
-            ){
+            && this.validaFecha_async){
             alert("Fechas válidas y con espacio para asignar");
-            return await resuelve(true);
+            return await true;
         }else{
-          //const dia = vf.getDiaDeLaSemana();
-          //alert("Fecha de salida no válida: "+dia);
-          return await resuelve(false);
+          const dia = vf.getDiaDeLaSemana();
+          alert("Fecha de salida no válida: "+dia);
+          return await false;
         }    
       } catch (error) {
         console.log("Error de validación: ", error.message);
@@ -256,6 +279,55 @@ export class SstComponent implements OnInit {
       this.ssti.dateFechaSol = new Date(hoy);
   }
 
+  asignarFolio(){}
+
+  async solicitarST(){
+    this.formularioSST.value.fechaSol = ValidarFechas.parseDateToStringWithFormat(new Date());
+    var salst = Date.parse(this.formularioSST.value.salidaSt);
+    var regst = Date.parse(this.formularioSST.value.regresoSt);
+    var hoy = new Date();
+
+    var dateSalida = this.formularioSST.value.salidaSt;
+    var dateRegreso = this.formularioSST.value.regresoSt;
+    var dateFechaSol = hoy;
+
+    this.formularioSST.value.salidaSt = ValidarFechas.fechaToString(new Date(salst));
+    this.formularioSST.value.regresoSt = ValidarFechas.fechaToString(new Date(regst));
+    
+    this.ssti = this.formularioSST.value;
+    this.ssti.fechaSolImp = ValidarFechas.parseDateToStringWithFormat_Imprimir(new Date());
+    this.ssti.dateSalida = dateSalida;
+    this.ssti.dateRegreso = dateRegreso;
+    this.ssti.dateFechaSol = new Date(hoy);
+
+    console.log('this.sst: ', this.ssti);
+    console.log('this.formularioSST: ', this.formularioSST.value);
+    console.log('this.servicios.selectedST: ', this.servicios.selectedST);
+    
+    this.folio = await this.servicios.getFolioST_async();
+
+    console.log("ANTES del async await folio: ", this.folio);
+
+    await this.servicios.getFolioST().subscribe((datos: { size: any; })=>{
+      this.folio = datos.size
+      console.log("folio: ", this.folio);
+      this.verificarDisponibilidadyFechas(this.ssti, this.folio+1);  
+    });
+
+    console.log("después del async await folio: ", this.folio);
+
+    console.log("OTRAS VEZ this.sst: ", this.ssti);
+    
+
+    //this.verificarDisponibilidadyFechas(this.sst);
+
+      
+    
+    
+    //this.limpiarFormulario();
+    this.formularioSST.reset();
+  }
+  
   close(): void{
     this.dialogRef.close();
     this.router.navigate(['solicitudes-st']);
@@ -277,5 +349,49 @@ export class SstComponent implements OnInit {
     this.servicios.selectedST.infAd = '';
     this.servicios.selectedST.pasajeros = '';
     this.servicios.selectedST.nPasajeros = '';
+  }
+
+  isValid(campo: string):string{
+    const validarCampo = this.formularioSST.get(campo);
+    return (!validarCampo?.valid && validarCampo?.touched)
+      ? 'es inválido' : validarCampo?.touched ? 'es válido' :  '';
+  }
+
+  async verificarDisponibilidadyFechas(ssti:SolicitudSTI, folio: number){
+    
+    const vf: ValidarFechas = new ValidarFechas(ssti.salidaSt, ssti.regresoSt, ssti.fechaSol);
+    
+    console.log( "vf.getDateSalida() ", vf.getDateSalida() );
+    console.log( "ssti.salidaSt: ", ssti.salidaSt);
+    
+    console.log( "vf.getDateRegreso() ", vf.getDateRegreso() );
+    console.log( "ssti.regresoSt: ", ssti.regresoSt);
+    
+    console.log( "vf.getDateFechaSol() ", vf.getDateFechaSol() );
+    console.log( "ssti.fechaSol: ", ssti.fechaSol);
+
+    if (vf.validarFechas()){
+      alert("FECHAS VáLIDAS");
+      if(this.servicios.getSTColeccion_async(ssti)){
+        alert("Se registrará e imprimirá..."+ssti)
+        if(this.servicios.getFolioST_async!=null && this.deptoSesion.uid!=undefined ){
+          ssti.folio = folio.toString();
+          //console.log("vr.ValidarFechas() IF -> folio: ", folio);
+          //console.log("ssti: ", ssti);
+          console.log("deptoSesion.id: ", this.deptoSesion.id);
+          ssti.departamento_id = this.deptoSesion.id;
+          console.log("OTRAS VEZZZZZZ this.sst: ", ssti);
+          await this.servicios.addSST_async(ssti, '', this.deptoSesion);
+        }else{
+          alert("INICIE SESION");
+        }
+      }else{
+        alert("no hay disponibilidad");
+      }
+    }else{
+      console.log("Diferencia entre días: "+vf.getDiferencia());
+      console.log("Día de salida: "+ vf.getDiaDeLaSemana());
+      console.log("FECHAS NO VALIDADAS");
+    }
   }
 }
