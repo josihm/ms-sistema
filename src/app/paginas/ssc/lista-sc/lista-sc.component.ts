@@ -106,7 +106,7 @@ export class ListaScComponent implements OnInit {
 
   add(){
     this.limpiarFormulario();
-    console.log("presionó en add(): ", this.servicios.selectedSC);
+    //console.log("presionó en add(): ", this.servicios.selectedSC);
     this.openModal();
   }
 
@@ -116,7 +116,7 @@ export class ListaScComponent implements OnInit {
       var hoy = ValidarFechas.parseDateToStringWithFormat(new Date());
       const vf: ValidarFechas = new ValidarFechas(element.entrega, element.entrega, hoy);
       if( vf.validarFechas_SCP()){
-        console.log("ELEMENT: ", element);
+        //console.log("ELEMENT: ", element);
         this.servicios.selectedSC = element;
         //console.log("element con await: ", element);
         //Cómo poner la fecha del DATE 
@@ -135,8 +135,8 @@ export class ListaScComponent implements OnInit {
 
     }else{
       this.ssci = await this.scServicio.getSSCP_xFolio(element.folio);
-      console.log("IMPRIME this.deptoSesion: ", this.deptoSesion);
-      console.log("IMPRIME element aka this.ssti: ", this.ssci);
+      //console.log("IMPRIME this.deptoSesion: ", this.deptoSesion);
+      //console.log("IMPRIME element aka this.ssti: ", this.ssci);
       GenerarPDFService.generaPDF_SC(this.ssci,this.deptoSesion,Number(this.ssci.folio),this.ssci.id);
     }
     this.ngOnInit();
@@ -174,14 +174,14 @@ export class ListaScComponent implements OnInit {
   }
 
   cambia_Departamento_x_departamento_id(element: any){
-    console.log("elemento", element);
+    //console.log("elemento", element);
     return this.authServicio.getDeptoDepartamento(element.departamento_id)
               .where("departamento", "==", element.departamento_id)
               .get().then(doc=>{doc.forEach(
                     doc=>{
                       element.departamento_id=doc.id;
-                      console.log("element.departamento_id: ", element.departamento_id);
-                      console.log("element.folio: ", element.folio);
+                      //console.log("element.departamento_id: ", element.departamento_id);
+                      //console.log("element.folio: ", element.folio);
                       this.servicios.selectedSC = element;
                       this.servicios.selectedSC.entrega = ValidarFechas.convertirFechaToMatPicker(element.entrega);
                       //this.servicios.selectedSC.regresoSt = ValidarFechas.convertirFechaToMatPicker(element.regresoSt);

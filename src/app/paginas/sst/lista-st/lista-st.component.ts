@@ -61,12 +61,12 @@ export class ListaStComponent implements OnInit {
       this.router.navigate(['login']);
     }else{
       this.deptoSesion = JSON.parse(String(localStorage.getItem("deptoSesion")));
-      console.log("this.deptoSesion.id: ",this.deptoSesion);
+      //console.log("this.deptoSesion.id: ",this.deptoSesion);
       this.deptos = await this.authServicio.getDeptos_async();
-      console.log('todos los deptos: ', this.deptos);
+      //console.log('todos los deptos: ', this.deptos);
       if(this.deptoSesion.departamento=="JARDINERÍA Y TRANSPORTES"){
         this.arrSstI = await this.stServicio.allSST_async();
-        console.log('todas las sst: ', this.arrSstI);
+        //console.log('todas las sst: ', this.arrSstI);
         this.totalRegistros = this.arrSstI.length;
         this.dataSource.data = await this.cambiarDepartamento_id_x_Departamento(this.arrSstI, this.deptos);
       }else{
@@ -113,7 +113,7 @@ export class ListaStComponent implements OnInit {
       var hoy = ValidarFechas.parseDateToStringWithFormat(new Date());
       const vf: ValidarFechas = new ValidarFechas(element.salidaSt, element.regresoSt, hoy);
       if( vf.validarFechas_SCP()){
-        console.log("element: ", element);
+        //console.log("element: ", element);
         this.servicios.selectedST = element;
         //console.log("element con await: ", element);
         //Cómo poner la fecha del DATE 
@@ -132,13 +132,13 @@ export class ListaStComponent implements OnInit {
       this.cambiarDepartamento_x_Departamento_id(this.arrSstI);
       this.deptoInterface = await this.authServicio.getDepto_async(element.departamento_id);
       this.ssti = await this.stServicio.getSST_id_async(element.id);
-      console.log("IMPRIME this.deptoInterface: ", this.deptoInterface);
-      console.log("IMPRIME element aka this.ssti: ", this.ssti);
+      //console.log("IMPRIME this.deptoInterface: ", this.deptoInterface);
+      //console.log("IMPRIME element aka this.ssti: ", this.ssti);
       GenerarPDFService.generaPDF_ST(this.ssti,this.deptoInterface,Number(this.ssti.folio),this.ssti.id);
     }else{
       this.ssti = await this.stServicio.getSST_folio_async(element.folio);
-      console.log("IMPRIME this.deptoSesion: ", this.deptoSesion);
-      console.log("IMPRIME element aka this.ssti: ", this.ssti);
+      //console.log("IMPRIME this.deptoSesion: ", this.deptoSesion);
+      //console.log("IMPRIME element aka this.ssti: ", this.ssti);
       GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
     }
     this.ngOnInit();
@@ -194,14 +194,14 @@ export class ListaStComponent implements OnInit {
   }
 
   cambia_Departamento_x_departamento_id(element: any){
-    console.log("elemento", element);
+    //console.log("elemento", element);
     return this.authServicio.getDeptoDepartamento(element.departamento_id)
               .where("departamento", "==", element.departamento_id)
               .get().then(doc=>{doc.forEach(
                     doc=>{
                       element.departamento_id=doc.id;
-                      console.log("element.departamento_id: ", element.departamento_id);
-                      console.log("element.folio: ", element.folio);
+                      //console.log("element.departamento_id: ", element.departamento_id);
+                      //console.log("element.folio: ", element.folio);
                       this.servicios.selectedST = element;
                       this.servicios.selectedST.salidaSt = ValidarFechas.convertirFechaToMatPicker(element.salidaSt);
                       this.servicios.selectedST.regresoSt = ValidarFechas.convertirFechaToMatPicker(element.regresoSt);

@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
       localStorage.setItem("isLogged", "false");
       this.router.navigate(['/login']);
     } catch (error) {
-      console.log('error en el logout(): ', error);
+      console.log('error en el logout() del Header: ', error);
     } 
   }
 

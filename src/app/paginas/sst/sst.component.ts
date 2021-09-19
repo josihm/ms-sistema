@@ -190,21 +190,21 @@ export class SstComponent implements OnInit {
       //this.formularioSST.value.regresoSt = ValidarFechas.fechaToString(new Date(Date.parse(this.formularioSST.value.regresoSt)));
       //this.servicios.editSST(this.formularioSST.value);
       //this.servicios.selectedST.departamento_id = await this.authServicio.getIdDeptoXdepartamento(this.servicios.selectedST.departamento_id);
-      console.log("guardar() ELSE this.servicios.selectedST: ", this.servicios.selectedST);
+      //console.log("guardar() ELSE this.servicios.selectedST: ", this.servicios.selectedST);
       //console.log("guardar() ELSE this.formularioSST.value: ", this.formularioSST.value);
       
       this.formatearFechas();
 
       this.validaFecha_async = await this.stServicio.getSTColeccionFiltradaBoolean_async(this.ssti);
       //TIENE QUE MANDAR TRUE
-      console.log("primera validacion: ", this.validaFecha_async);
-      console.log("de la fecha de salida: ", this.ssti.salidaSt);
+      //console.log("primera validacion: ", this.validaFecha_async);
+      //console.log("de la fecha de salida: ", this.ssti.salidaSt);
       const otravalidacion = await this.validar(this.ssti);
       if (otravalidacion){
         if(this.ssti.folio!=null || this.ssti.folio!="" 
             && (this.deptoSesion.uid!=null || this.deptoSesion.uid!=undefined)){
-          console.log("Proceder a actualizar la solicitud !!!", this.ssti);
-          console.log("del Departamento !!!", this.deptoSesion);
+          //console.log("Proceder a actualizar la solicitud !!!", this.ssti);
+          //console.log("del Departamento !!!", this.deptoSesion);
           await this.stServicio.addUpdate(this.ssti);
           alert("Registro actualizado, verificar!!!");
           GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
@@ -231,7 +231,7 @@ export class SstComponent implements OnInit {
           return await resuelve(false);
         }    
       } catch (error) {
-        console.log("Error de validación: ", error.message);
+        //console.log("Error de validación: ", error.message);
         return await rechaza(false);
       }
     });

@@ -57,6 +57,30 @@ export class AuthService {
     );
   }
   
+  async logIN(correo: string, psw: string):Promise<any>{
+    return await new Promise( async (resuelve, rechaza)=>{
+      try {
+        this.usuario$ = (await firebase.default.auth()
+          .signInWithEmailAndPassword(correo, psw).then((userCredential)=>{
+            var user = userCredential.user;
+            this.usuario$ = user;
+            return resuelve(this.usuario$);
+          })
+          .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            var errorStack = error.stack;
+            console.log("Error en servicio del login: ", error.code, error.message, error.stack);
+            return resuelve(error.message);
+          }))
+      } catch (error) {
+        //return await rechaza(error.message);
+        //return await rechaza(error.stack);
+        return await rechaza(error.EMAIL_EXISTS);
+      }
+    });
+
+  }
   async logIn(correo: string, psw: string):Promise<any>{
     try{
       this.usuario$ = await firebase.default.auth().signInWithEmailAndPassword(correo,psw)
@@ -68,7 +92,7 @@ export class AuthService {
         .catch((error) => {});
       return this.usuario$;
     }catch(error){
-      console.log('error');
+      console.log('error:', error.stack);
     }
   }
   

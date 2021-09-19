@@ -39,7 +39,7 @@ export class SscComponent implements OnInit {
       //this.servicios.selectedST = await this.stServicio.getSST_folio_async(this.servicios.selectedST.folio);
       if (this.servicios.selectedSC.folio==""||undefined||null){
         //CUANDO VIENE VACíO o es nuevo desde la lista
-        console.log("PRESIONó en el botón NUEVO o ADD");
+        //console.log("PRESIONó en el botón NUEVO o ADD");
         this.limpiarFormulario();
       }else{
         this.ssci = await this.scServicio.getSSCP_xFolio(this.servicios.selectedSC.folio) 
@@ -49,18 +49,18 @@ export class SscComponent implements OnInit {
         var entrega = ValidarFechas.convertirFechaStringToMatPicker(this.servicios.selectedSC.entrega)
         this.servicios.selectedSC.entrega =  ValidarFechas.parseDateToStringWithFormat(entrega);
 
-        console.log("datos traidos de la lista this.servicios.selectedSC: ", this.servicios.selectedSC);
-        console.log("datos traidos de la lista this.ssci: ", this.ssci);
-        console.log("Convertir fecha string a Date: ", ValidarFechas.convertirFechaStringToMatPicker(this.ssci.entrega));
+        //console.log("datos traidos de la lista this.servicios.selectedSC: ", this.servicios.selectedSC);
+        //console.log("datos traidos de la lista this.ssci: ", this.ssci);
+        //console.log("Convertir fecha string a Date: ", ValidarFechas.convertirFechaStringToMatPicker(this.ssci.entrega));
       }
     }
   }
 
   async guardar(): Promise<void>{
-    console.log("guardar() -> ", this.servicios.selectedSC);
+    //console.log("guardar() -> ", this.servicios.selectedSC);
     if(this.servicios.selectedSC.id==''||this.servicios.selectedSC.id==null||
         this.servicios.selectedSC==undefined){
-      console.log("guardar() IF this.servicios.selectedSC: ", this.servicios.selectedSC);
+     // console.log("guardar() IF this.servicios.selectedSC: ", this.servicios.selectedSC);
       this.ssci = this.servicios.selectedSC;
       this.formatearFechas();
       this.ssci.departamento_id = this.deptoSesion.id;
@@ -68,8 +68,8 @@ export class SscComponent implements OnInit {
       if(this.validar(this.ssci)){
         this.folio = await this.scServicio.getSSCNumeroFolioSiguiente_async();
           this.ssci.folio = this.folio;
-          console.log("Proceder a registrar la solicitud !!!", this.ssci);
-          console.log("del Departamento !!!", this.deptoSesion);
+          //console.log("Proceder a registrar la solicitud !!!", this.ssci);
+          //console.log("del Departamento !!!", this.deptoSesion);
           await this.scServicio.addUpdate(this.ssci);
           alert("Registro guardado, verificar!!!");
           GenerarPDFService.generaPDF_SC(this.ssci,this.deptoSesion,Number(this.ssci.folio),this.ssci.id);
@@ -79,7 +79,7 @@ export class SscComponent implements OnInit {
         alert("Algo sucedió mal");
       }
     }else{
-      console.log("guardar() ELSE this.servicios.selectedST: ", this.servicios.selectedST);
+      //console.log("guardar() ELSE this.servicios.selectedST: ", this.servicios.selectedST);
       //console.log("guardar() ELSE this.formularioSST.value: ", this.formularioSST.value);
       
       this.formatearFechas();
@@ -87,8 +87,8 @@ export class SscComponent implements OnInit {
       if (this.validar(this.ssci)){
         if(this.ssci.folio!=null || this.ssci.folio!="" 
             && (this.deptoSesion.uid!=null || this.deptoSesion.uid!=undefined)){
-          console.log("Proceder a actualizar la solicitud !!!", this.ssci);
-          console.log("del Departamento !!!", this.deptoSesion);
+          //console.log("Proceder a actualizar la solicitud !!!", this.ssci);
+          //console.log("del Departamento !!!", this.deptoSesion);
           await this.scServicio.addUpdate(this.ssci);
           alert("Registro actualizado, verificar!!!");
           GenerarPDFService.generaPDF_SC(this.ssci,this.deptoSesion,Number(this.ssci.folio),this.ssci.id);

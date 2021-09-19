@@ -29,37 +29,38 @@ export class LoginComponent implements OnInit {
   }
 
   async signIn(){
-    console.log('datos->formularioLogin: ', this.formularioLogin.value);
+    //console.log('datos->formularioLogin: ', this.formularioLogin.value);
     try {
       const {correo, psw} = this.formularioLogin.value;
       this.usuarioActual = await this.afAuth.logIn(correo, psw);
       //await this.afAuth.loginGoogle();
       if (this.usuarioActual){
-        //this.router.navigate(['home']);
-        console.log("async singIn() -> this.usuarioActual: ", this.usuarioActual);
-        console.log("async singIn() -> this.usuarioActual.id: ", this.usuarioActual.id);
-        console.log("async singIn() -> this.usuarioActual.uid: ", this.usuarioActual.uid);
-        console.log("async singIn() -> this.usuarioActual.displayName: ", this.usuarioActual.displayName);
+        this.router.navigate(['home']);
+        //console.log("async singIn() -> this.usuarioActual: ", this.usuarioActual);
+        //console.log("async singIn() -> this.usuarioActual.id: ", this.usuarioActual.id);
+        //console.log("async singIn() -> this.usuarioActual.uid: ", this.usuarioActual.uid);
+        //console.log("async singIn() -> this.usuarioActual.displayName: ", this.usuarioActual.displayName);
 
         await this.afAuth.signIn(this.usuarioActual.uid)
           .where("uid", "==", this.usuarioActual.uid)
           .get().then(doc=>{
             doc.forEach(doc=>{
-              console.log(doc.id);
+              //console.log(doc.id);
               this.deptoSel = doc.data();
               this.deptoSel.id = doc.id;
               let deptoSesion = JSON.stringify(this.deptoSel);
               localStorage.setItem("deptoSesion", deptoSesion);
               localStorage.setItem("isLogged", "true");
-              console.log("this.deptoSel: ", this.deptoSel);
-              console.log("let deptoSesion: ", deptoSesion);
-              console.log("localStorage.getItem ", localStorage.getItem("deptoSesion"));
+              //console.log("this.deptoSel: ", this.deptoSel);
+              //console.log("let deptoSesion: ", deptoSesion);
+              //console.log("localStorage.getItem ", localStorage.getItem("deptoSesion"));
               this.router.navigate(['home']);
             })
           });
 
       }else{
-        console.log("Usuario no registrado");
+        alert("Verifique usuario y contraseña!!!")
+        //console.log("Usuario no registrado");
       }
     } catch (error) {
       console.log("error en signIn() del LoginComponent: ", error)

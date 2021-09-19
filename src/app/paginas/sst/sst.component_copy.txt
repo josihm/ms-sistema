@@ -1,3 +1,4 @@
+/***
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -13,11 +14,11 @@ import { ServiciosService } from 'src/app/recursos/servicios/servicios.service';
 import { SstService } from 'src/app/recursos/servicios/sst.service';
 import { ValidarFechas } from 'src/app/recursos/servicios/validarFechas';
 
-/*@Component({
+@Component({
   selector: 'app-sst',
   templateUrl: './sst.component.html',
   styleUrls: ['./sst.component.scss']
-})*/
+})
 
 export class SstComponent implements OnInit {
   usuarioActual$: UsuarioInterface | any;
@@ -184,8 +185,9 @@ export class SstComponent implements OnInit {
       this.servicios.editSST(this.formularioSST.value);
     }
     this.close();
-  }*/
-
+  }
+****** */
+/*
   async guardar():Promise<void>{
 
     if (this.servicios.selectedST.id == null
@@ -395,3 +397,5 @@ export class SstComponent implements OnInit {
     }
   }
 }
+
+***** */
