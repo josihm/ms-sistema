@@ -198,6 +198,30 @@ export class AuthService {
     return this.coleccionDeptos.ref;
   }
 
+  async signIN(uid:string): Promise<DepartamentoInterface>{
+    return await new Promise(async (resuelve, rechaza) => {
+      try {
+        await this.coleccionDeptosFirestore
+                                .where("uid", "==", uid)
+                                .get().then((querySnapshot: any[]) => {
+                                  querySnapshot.forEach((doc) => {
+                                      // doc.data() is never undefined for query doc snapshots
+                                      //console.log(doc.id, " => ", doc.data());
+                                      this.deptoInterface = doc.data();
+                                      return resuelve(this.deptoInterface);
+                                  });
+                                })
+                                .catch((error: any) => {
+                                  console.log("Error getting documents: ", error);
+                              
+                                });
+        
+      } catch (error) {
+        return rechaza(error.message);
+      }
+    });
+  }
+
   getDeptos(){return this.coleccionDeptos;}
 
   async getDeptos_async():Promise<DepartamentoInterface[]>{
