@@ -21,6 +21,7 @@ export class AuthService {
   private unSubscribe$ = new Subject<void>();
   //public usuario$: Observable<UsuarioInterface> | any;
   private usuario$: Observable<UsuarioInterface> | any;
+  private verificaUsuario$: Observable<UsuarioInterface> | any;
   //private usuario: Observable<UsuarioInterface> | any;
   coleccionDeptos!: AngularFirestoreCollection<DepartamentoInterface>;
   coleccionDeptosFirestore: AngularFirestoreCollection<DepartamentoInterface> | any;
@@ -139,11 +140,13 @@ export class AuthService {
   }
 
   async logOut(): Promise<any>{ 
-    try{
-      await this.afAuth.signOut();
-    }catch(error){
-      console.log('error logOut: ', error);
-    }
+    return await new Promise(async (resuelve, rechaza)=>{
+      try {
+        return await resuelve (this.afAuth.signOut());
+      } catch (error) {
+        return await rechaza(error.message);
+      }
+    });
   }
 
   async registrar(usuario:UsuarioInterface):Promise<UsuarioInterface | any>{
@@ -170,6 +173,7 @@ export class AuthService {
         await firebase.default.auth().currentUser?.updateProfile({ displayName: usuario.displayName });
         return await resuelve(this.usuario$);
       } catch (error) {
+        alert("Correo ya registrado!!!");
         return await rechaza(error.message);
       }
     });

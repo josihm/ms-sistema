@@ -35,6 +35,8 @@ export class DepartamentoComponent implements OnInit {
   formularioRegistroDepartamento!: FormGroup;
   private isEmail = /\S+@+\S+\.\S/;
   private isExtensiones = /\d/;
+
+  confirmapsw!: string;
   
   constructor(private router: Router, private authServicio: AuthService,
               private usuarioServicio: ServiciosService,
@@ -46,7 +48,7 @@ export class DepartamentoComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    console.log("this.depto: ", this.depto);
+    //console.log("this.depto: ", this.depto);
     if (typeof !this.depto === undefined){
       this.router.navigate(['/home']);
     }else{
@@ -72,6 +74,7 @@ export class DepartamentoComponent implements OnInit {
       //,
       //psw: new FormControl([''],[Validators.required]),
       psw: new FormControl(['']),
+      
     });
   }
 
@@ -79,62 +82,68 @@ export class DepartamentoComponent implements OnInit {
     //console.log('registrar() -> ', this.formularioRegistroDepartamento.value);
     //console.log(this.formularioRegistroDepartamento.valid);
 
-    this.depto = this.formularioRegistroDepartamento.value;
-    this.txtEncriptado = await EncriptarService.encrypt("aguilaJaguar");
-    //this.depto.psw = await EncriptarService.encrypt(this.depto.psw);
+    console.log("psw y confirmapsw: ", this.formularioRegistroDepartamento.value.psw, this.confirmapsw)
+    
+    if (this.formularioRegistroDepartamento.value.psw === this.confirmapsw){
+      this.depto = this.formularioRegistroDepartamento.value;
+      this.txtEncriptado = await EncriptarService.encrypt("aguilaJaguar");
+      //this.depto.psw = await EncriptarService.encrypt(this.depto.psw);
 
-    //console.log("this.depto: ", this.depto);
-    const usuarioRegistro = {
-      email: this.formularioRegistroDepartamento.value.correosind,
-      psw: this.formularioRegistroDepartamento.value.psw,
-      displayName: this.depto.titular,
-      phoneNumber: this.depto.teldirecto,
-    } 
-    this.usuario = usuarioRegistro;
-    this.depto.psw = await EncriptarService.encrypt(this.txtEncriptado);
-    /*
-    this.usuario.email = this.depto.correosind;
-    this.usuario.psw = this.formularioRegistroDepartamento.value.psw;
-    this.usuario.displayName = this.depto.titular;
-    this.usuario.phoneNumber = this.depto.teldirecto;
-    */
-    //console.log("this.usuario: ", this.usuario);
+      //console.log("this.depto: ", this.depto);
+      const usuarioRegistro = {
+        email: this.formularioRegistroDepartamento.value.correosind,
+        psw: this.formularioRegistroDepartamento.value.psw,
+        displayName: this.depto.titular,
+        phoneNumber: this.depto.teldirecto,
+      } 
+      this.usuario = usuarioRegistro;
+      this.depto.psw = await EncriptarService.encrypt(this.txtEncriptado);
+      /*
+      this.usuario.email = this.depto.correosind;
+      this.usuario.psw = this.formularioRegistroDepartamento.value.psw;
+      this.usuario.displayName = this.depto.titular;
+      this.usuario.phoneNumber = this.depto.teldirecto;
+      */
+      //console.log("this.usuario: ", this.usuario);
 
-    if (this.formularioRegistroDepartamento.valid) {
-      const idDepto = this.depto?.id || null;
+      if (this.formularioRegistroDepartamento.valid) {
+        const idDepto = this.depto?.id || null;
 
-      const usuarioReg = this.usuario;
-      const idUsuario = this.usuario?.id || null;
+        const usuarioReg = this.usuario;
+        const idUsuario = this.usuario?.id || null;
 
-      this.existeDepto = await this.deptoServicio.existeDepartamento(this.depto.departamento);
-      //console.log("this.existeDepto: ",this.existeDepto);
+        this.existeDepto = await this.deptoServicio.existeDepartamento(this.depto.departamento);
+        //console.log("this.existeDepto: ",this.existeDepto);
 
-      if(this.existeDepto){
-        alert("Ya existe un registro con ese Departamento");
-        this.formularioRegistroDepartamento.reset();
+        if(this.existeDepto){
+          alert("Ya existe un registro con ese Departamento");
+          this.formularioRegistroDepartamento.reset();
+        }else{
+
+          this.usuario$ = await this.authServicio.registraPorfavor(usuarioReg);
+          
+          this.usuario.uid = this.usuario$;
+          this.depto.uid = this.usuario$;
+          
+          await this.usuarioServicio.guardarUsuarioPorFavorEnBD(this.usuario, idUsuario);
+
+          await this.deptoServicio.guardar(this.depto, idDepto);
+
+          this.depto = await this.deptoServicio.getDeptoxUID(String(this.usuario.uid));
+          let deptoSesion = JSON.stringify(this.depto);
+          localStorage.setItem("deptoSesion", deptoSesion);
+          localStorage.setItem("isLogged", "true");
+          
+          this.formularioRegistroDepartamento.reset();
+          this.router.navigate(['home']);
+        }
       }else{
-
-        this.usuario$ = await this.authServicio.registraPorfavor(usuarioReg);
-        
-        this.usuario.uid = this.usuario$;
-        this.depto.uid = this.usuario$;
-        
-        await this.usuarioServicio.guardarUsuarioPorFavorEnBD(this.usuario, idUsuario);
-
-        await this.deptoServicio.guardar(this.depto, idDepto);
-
-        this.depto = await this.deptoServicio.getDeptoxUID(String(this.usuario.uid));
-        let deptoSesion = JSON.stringify(this.depto);
-        localStorage.setItem("deptoSesion", deptoSesion);
-        localStorage.setItem("isLogged", "true");
-        
+        alert('Falló el registro');
+        console.log('Algo salió mal');
         this.formularioRegistroDepartamento.reset();
-        this.router.navigate(['home']);
       }
     }else{
-      alert('Falló el registro');
-      console.log('Algo salió mal');
-      this.formularioRegistroDepartamento.reset();
+      alert("Contraseñas distintas. Verificar!!!");
     }
   }
 

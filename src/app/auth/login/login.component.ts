@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
   //async signIn():Promise<void>{
   async signIn(correo:string, psw:string):Promise<void>{
     //console.log('datos->formularioLogin: ', this.formularioLogin.value);
-    console.log('datos->', correo, psw);
+    //console.log('datos->', correo, psw);
     try {
       //const {correo, psw} = this.formularioLogin.value;
       this.usuarioActual = await this.afAuth.logIn(correo, psw);
@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
         //this.router.navigate(['home']);
         //console.log("async singIn() -> this.usuarioActual: ", this.usuarioActual);
         //console.log("async singIn() -> this.usuarioActual.id: ", this.usuarioActual.id);
-        console.log("async singIn() -> this.usuarioActual.uid: ", this.usuarioActual.uid);
+        //console.log("async singIn() -> this.usuarioActual.uid: ", this.usuarioActual.uid);
         //console.log("async singIn() -> this.usuarioActual.displayName: ", this.usuarioActual.displayName);
         this.deptoInterface = await this.afAuth.signIN(this.usuarioActual.uid);
         this.deptoSel = this.deptoInterface;

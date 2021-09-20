@@ -72,7 +72,7 @@
                 <input type="password" class="form-control" placeholder="Contraseña" formControlName="psw"> 
             </div>
             <div class="form-group col-md-12">
-                <input type="password" class="form-control" placeholder="Confirma contraseña"> 
+                <input type="password" class="form-control" placeholder="Confirma contraseña" [(ngModel)]= "this.confirmapsw" [ngModelOptions]="{standalone: true}"> 
             </div>
             <div class="form-group col-md-12">
                 <button class="btn bg-dark btn-block text-light">Registrar</button>

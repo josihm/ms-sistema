@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
         || localStorage.getItem("isLogged") == ''
         || localStorage.getItem("isLogged") == undefined){
       localStorage.setItem("isLogged", "false");
-      this.router.navigate(['home']);
+      this.router.navigate(['login']);
     }else{
       localStorage.setItem("isLogged", "true");
       this.router.navigate(['home']);

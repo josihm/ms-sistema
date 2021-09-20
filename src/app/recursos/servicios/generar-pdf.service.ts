@@ -16,7 +16,7 @@ export class GenerarPDFService {
   static color: string;
   static cantidad: string;
      
-  static generaPDF_ST(sst: SolicitudSTI, depto: Departamento, folio: number, id:string){
+  static async generaPDF_ST(sst: SolicitudSTI, depto: Departamento, folio: number, id:string){
   //static generaPDF_ST(sst: SolicitudSTI, depto: Departamento, folio: number){
     const documentDefinition = { 
       pageSize: 'LETTER',
@@ -295,7 +295,7 @@ export class GenerarPDFService {
        }
       ]
    };
-   (<any>pdfMake).createPdf(documentDefinition).open();
+   await (<any>pdfMake).createPdf(documentDefinition).open();
   }
 
 /* ----------------------------------------------------------------- */

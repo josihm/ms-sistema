@@ -21,10 +21,11 @@ export class HeaderComponent implements OnInit {
 
   logIn(){}
 
-  async logOut(){
+  logOut(){
     try {
       this.authServicio.logOut();
       localStorage.removeItem("deptoSesion");
+      localStorage.removeItem("isLogged");
       localStorage.setItem("deptoSesion", "");
       localStorage.setItem("isLogged", "false");
       this.router.navigate(['/login']);
