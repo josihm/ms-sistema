@@ -183,7 +183,6 @@ export class ValidarFechas{
       
       date = new Date(nueva);
 
-      
       return date;
     }
 }

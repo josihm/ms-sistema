@@ -17,7 +17,7 @@ export class EncriptarService {
       try {
         this.txtdecryp = CryptoJS.AES.decrypt(psw.trim(), this.key.trim()).toString(CryptoJS.enc.Utf8);
         return resuelve(this.txtdecryp) ;
-      } catch (error) {
+      } catch (error:any) {
         return rechaza(error.message);
       }
     });

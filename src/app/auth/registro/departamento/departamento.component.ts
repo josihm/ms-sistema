@@ -25,7 +25,6 @@ export class DepartamentoComponent implements OnInit {
   depto!: DepartamentoInterface | any;
   deptoSel: Departamento | any = new Departamento();
 
-
   usuario!: UsuarioInterface;
   usuario$!: Observable<UsuarioInterface> | any;
 

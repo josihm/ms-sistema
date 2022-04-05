@@ -16,7 +16,7 @@ export class SscService {
   arregloSSCP: SolicitudSCPI[]=[];
 
   numerodeFolio!: number;
-
+  
   constructor(private afs: AngularFirestore) { 
     this.coleccionSSC = firebase.default.firestore().collection("solicitudessc");
   }
@@ -32,7 +32,7 @@ export class SscService {
                       })
                       return resuelve(this.arregloSSCP);
                     });
-      } catch (error) {
+      } catch (error: any) {
         return rechaza(error.message);
       }
     });
@@ -49,7 +49,7 @@ export class SscService {
                       })
                     });
                     return resuelve(this.arregloSSCP);
-      } catch (error) {
+      } catch (error: any) {
         return rechaza(error.message);
       }
     })
@@ -66,7 +66,7 @@ export class SscService {
           this.numerodeFolio = this.arregloSSCP.length+1;
           return resolve(this.numerodeFolio);
         })
-      } catch (error) {
+      } catch (error: any) {
         reject(error.message);
       }
     });
@@ -82,7 +82,7 @@ export class SscService {
                         return resuelve(this.ssci);
                       }
                     });
-      } catch (error) {
+      } catch (error: any) {
         rechaza(error.message);
       }
     });
@@ -98,7 +98,7 @@ export class SscService {
                         return resuelve(this.ssci);
                       })
                     });
-      } catch (error) {
+      } catch (error: any) {
         return rechaza(error.message);
       }
     });
@@ -129,7 +129,7 @@ export class SscService {
         
         const respuesta = await this.coleccionSSC.doc(id).set(data);
         return resuelve(respuesta);
-      } catch (error) {
+      } catch (error: any) {
         return rechaza(error.message);
       }
     } );

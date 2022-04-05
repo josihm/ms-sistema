@@ -82,6 +82,7 @@ export class AuthService {
     });
 
   }
+  
   async logIn(correo: string, psw: string):Promise<any>{
     try{
       this.usuario$ = await firebase.default.auth().signInWithEmailAndPassword(correo,psw)

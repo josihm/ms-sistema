@@ -4,9 +4,9 @@ export interface DepartamentoInterface{
     departamento: string;
     titular: string;
     correosind: string;
-    teldirecto: string;
-    ext: string;
-    ext2: string;
+    teldirecto?: string;
+    ext?: string;
+    ext2?: string;
     psw: string;
     rol?: Roles;
 }

@@ -120,7 +120,7 @@ export class ServiciosService {
         const data = { id, ...usuario};
         const respuesta = await this.coleccionUsuarios.doc(id).set(data);
         resolve(respuesta);
-      } catch (error) {
+      } catch (error:any) {
         reject(error.message);
       }
     });
@@ -133,7 +133,7 @@ export class ServiciosService {
         const data = { id, ...usuario};
         const respuesta = await this.coleccionUsuarios.doc(id).set(data);
         resolve(respuesta);
-      } catch (error) {
+      } catch (error:any) {
         reject(error.message);
       }
     });
@@ -149,7 +149,7 @@ export class ServiciosService {
         const respuesta = await this.coleccionSST.doc(id).set(data);
         GenerarPDFService.generaPDF_ST(ssti,deptoSesion,Number(ssti.folio),id);
         resolve(respuesta);
-      } catch (error) {
+      } catch (error:any) {
         reject(error.message);
       }
     });
@@ -179,7 +179,7 @@ export class ServiciosService {
         });;
         //resolve(respuesta);
         //resolve( datos.size+1 );
-      } catch (error) {
+      } catch (error:any) {
         reject(error.message);
       }
     });

@@ -13,11 +13,15 @@ import { MatModule } from './recursos/material/mat.module';
 import { AuthService } from './recursos/servicios/auth.service';
 import { ServiciosService } from './recursos/servicios/servicios.service';
 import { HeaderComponent } from './paginas/header/header.component';
+import { XlsExporterService } from './recursos/servicios/xls-exporter.service';
+import { HomeComponent } from './paginas/home/home.component';
+import { PruebadeserviciosComponent } from './paginas/pruebadeservicios/pruebadeservicios.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,7 @@ import { HeaderComponent } from './paginas/header/header.component';
     FacebookModule.forRoot()
   ],
   providers: [
-    AngularFirestore, AuthService, ServiciosService,
+    AngularFirestore, AuthService, ServiciosService, XlsExporterService,
   ],
   bootstrap: [AppComponent]
 })
