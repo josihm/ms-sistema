@@ -137,9 +137,9 @@ export class SstComponent implements OnInit {
         this.servicios.selectedST.regresoSt = ValidarFechas.parseDateToStringWithFormat(regresost);
         
         //console.log("datos traidos de la lista this.formularioSST.value: ", this.formularioSST.value);
-        console.log("datos traidos de la lista this.servicios.selectedSt: ", this.servicios.selectedST);
-        console.log("datos traidos de la lista this.ssti: ", this.ssti);
-        console.log("Convertir fecha string a Date: ", ValidarFechas.convertirFechaStringToMatPicker(this.ssti.salidaSt));
+        //console.log("datos traidos de la lista this.servicios.selectedSt: ", this.servicios.selectedST);
+        //console.log("datos traidos de la lista this.ssti: ", this.ssti);
+        //console.log("Convertir fecha string a Date: ", ValidarFechas.convertirFechaStringToMatPicker(this.ssti.salidaSt));
       }
       
     }
@@ -151,34 +151,35 @@ export class SstComponent implements OnInit {
       || this.servicios.selectedST.id == ''
       || this.servicios.selectedST.id == undefined){
         //
-        console.log("guardar() IF this.servicios.selectedST: ", this.servicios.selectedST);
+        //console.log("guardar() IF this.servicios.selectedST: ", this.servicios.selectedST);
         //console.log("guardar() IF this.formularioSST.value: ", this.formularioSST.value);
         this.ssti = this.servicios.selectedST;
         
-        console.log("this.ssti: ", this.ssti);
+        //console.log("this.ssti: ", this.ssti);
 
         this.formatearFechas();
 
 
         this.ssti.departamento_id = this.deptoSesion.id;
 
-        console.log("antes del async boolena this.ssti: ", this.ssti);
+        //console.log("antes del async boolena this.ssti: ", this.ssti);
 
         this.validaFecha_async = await this.stServicio.getSTColeccionFiltradaBoolean_async(this.ssti);
 
-        console.log("valida: ", this.validaFecha_async);
+        //console.log("valida: ", this.validaFecha_async);
         
         if(this.validaFecha_async){
 
           this.folio = await this.stServicio.getNumeroFolioSiguiente_async();
           this.ssti.folio = this.folio;
-          console.log("Proceder a registrar la solicitud !!!", this.ssti);
-          console.log("del Departamento !!!", this.deptoSesion);
+          //console.log("Proceder a registrar la solicitud !!!", this.ssti);
+          //console.log("del Departamento !!!", this.deptoSesion);
           await this.stServicio.addUpdate(this.ssti);
-          alert("Registro guardado, verificar!!!");
-          GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
+          
+          await GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
           //this.limpiarFormulario();
           this.router.navigate(['solicitudes-st']);
+          alert("Registro guardado, verificar!!!");
           this.close
         }else{
           alert("Algo sucedió mal");
@@ -206,8 +207,10 @@ export class SstComponent implements OnInit {
           //console.log("Proceder a actualizar la solicitud !!!", this.ssti);
           //console.log("del Departamento !!!", this.deptoSesion);
           await this.stServicio.addUpdate(this.ssti);
+          
+          await GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
+          this.close();
           alert("Registro actualizado, verificar!!!");
-          GenerarPDFService.generaPDF_ST(this.ssti,this.deptoSesion,Number(this.ssti.folio),this.ssti.id);
         }else{
           alert("Fechas no válidas!!!");
         }

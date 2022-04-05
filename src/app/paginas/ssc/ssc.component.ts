@@ -119,7 +119,6 @@ export class SscComponent implements OnInit {
       var hoy = new Date();
       var dateEntrega = this.servicios.selectedSC.entrega;
       
-
       this.servicios.selectedSC.entrega = ValidarFechas.fechaToString(new Date(salst));
       
       this.ssci = this.servicios.selectedSC;

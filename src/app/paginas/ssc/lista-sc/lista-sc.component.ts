@@ -62,9 +62,14 @@ export class ListaScComponent implements OnInit {
     }else{
       this.deptoSesion = JSON.parse(String(localStorage.getItem("deptoSesion")));
       this.deptos = await this.authServicio.getDeptos_async();
-      if(this.deptoSesion.departamento=="JARDINERÍA Y TRANSPORTES"){
+      console.log(this.deptoSesion.departamento);
+      if(this.deptoSesion.departamento==="JARDINERÍA Y TRANSPORTES"){
         this.isAdmin=true;
-      }else{
+
+        this.arrSscpI = await this.scServicio.allSSCP_async();
+        //console.log('todas las sst: ', this.arrSstI);
+        this.totalRegistros = this.arrSscpI.length;
+        this.dataSource.data = await this.cambiarDepartamento_id_x_Departamento(this.arrSscpI, this.deptos);      }else{
         this.isAdmin=false;
         this.arrSscpI = await this.scServicio.allSSCP_idDepto_async(String(this.deptoSesion.id));
         this.totalRegistros = this.arrSscpI.length;
@@ -133,10 +138,12 @@ export class ListaScComponent implements OnInit {
   async imprimir(element:any):Promise<void>{
     if (this.deptoSesion.departamento == "JARDINERÍA Y TRANSPORTES"){
 
+      this.cambiarDepartamento_x_Departamento_id(this.arrSscpI);
+      this.deptoInterface = await this.authServicio.getDepto_async(element.departamento_id);
+      this.ssci = await this.scServicio.getSSCP_xId_async(element.id);
+      GenerarPDFService.generaPDF_SC(this.ssci,this.deptoInterface,Number(this.ssci.folio),this.ssci.id);
     }else{
       this.ssci = await this.scServicio.getSSCP_xFolio(element.folio);
-      //console.log("IMPRIME this.deptoSesion: ", this.deptoSesion);
-      //console.log("IMPRIME element aka this.ssti: ", this.ssci);
       GenerarPDFService.generaPDF_SC(this.ssci,this.deptoSesion,Number(this.ssci.folio),this.ssci.id);
     }
     this.ngOnInit();
@@ -154,7 +161,7 @@ export class ListaScComponent implements OnInit {
           }
         }
         return await resuelve(arrSscI);
-      } catch (error) {
+      } catch (error:any) {
         return await rechaza(error.message);
       }
     });

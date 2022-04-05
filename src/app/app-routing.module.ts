@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'solicitudes-st', loadChildren: () => import('./paginas/sst/lista-st/lista-st.module').then(m => m.ListaStModule) },
   { path: 'solicitudes-sc', loadChildren: () => import('./paginas/ssc/lista-sc/lista-sc.module').then(m => m.ListaScModule) },
   { path: 'solicitud-sc', loadChildren: () => import('./paginas/ssc/ssc.module').then(m => m.SscModule) },
+  { path: 'solicitud-sdl', loadChildren: () => import('./paginas/ssdl/ssdl.module').then(m=> m.SsdlModule) },
   { path: 'pds', loadChildren: () => import('./paginas/pruebadeservicios/pruebadeservicios.module').then(m => m.PruebadeserviciosModule) }];
 
 @NgModule({

@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit {
   
   constructor(private router: Router, private authServicio: AuthService) {
     this.usuarioActual$ = this.authServicio.afAuth.user;
+    
   }
 
   ngOnInit(): void {
@@ -21,10 +22,11 @@ export class HeaderComponent implements OnInit {
 
   logIn(){}
 
-  async logOut(){
+  logOut(){
     try {
       this.authServicio.logOut();
       localStorage.removeItem("deptoSesion");
+      localStorage.removeItem("isLogged");
       localStorage.setItem("deptoSesion", "");
       localStorage.setItem("isLogged", "false");
       this.router.navigate(['/login']);

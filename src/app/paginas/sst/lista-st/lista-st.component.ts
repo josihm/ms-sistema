@@ -15,6 +15,7 @@ import { GenerarPDFService } from 'src/app/recursos/servicios/generar-pdf.servic
 import { ServiciosService } from 'src/app/recursos/servicios/servicios.service';
 import { SstService } from 'src/app/recursos/servicios/sst.service';
 import { ValidarFechas } from 'src/app/recursos/servicios/validarFechas';
+import { XlsExporterService } from 'src/app/recursos/servicios/xls-exporter.service';
 import { SstComponent } from '../sst.component';
 
 @Component({
@@ -51,6 +52,7 @@ export class ListaStComponent implements OnInit {
               private servicios: ServiciosService,
               private stServicio: SstService,
               private matDialog: MatDialog,  private overlay: Overlay,
+              private xlsxexporter: XlsExporterService,
               ) {
     this.usuarioActual$ = this.authServicio.afAuth.user;
   }
@@ -164,6 +166,10 @@ export class ListaStComponent implements OnInit {
     return this.totalRegistros;
   }
 
+  exportarAExcel(){
+    this.xlsxexporter.exportarAExcel(this.dataSource.data, 'mi_exportacion');
+  }
+
   async cambiarDepartamento_id_x_Departamento(arrSstI: SolicitudSTI[], deptos: DepartamentoInterface[]):Promise<SolicitudSTI[]>{
     return new Promise( async (resuelve,rechaza) =>{
       try {
@@ -176,7 +182,7 @@ export class ListaStComponent implements OnInit {
         }
         //return resuelve(this.dataSource.data=arrSstI);
         return resuelve(arrSstI);
-      } catch (error) {
+      } catch (error: any) {
         rechaza(error.message);
       }
     });
