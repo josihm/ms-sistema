@@ -14,7 +14,6 @@ export class HeaderComponent implements OnInit {
   
   constructor(private router: Router, private authServicio: AuthService) {
     this.usuarioActual$ = this.authServicio.afAuth.user;
-    
   }
 
   ngOnInit(): void {
