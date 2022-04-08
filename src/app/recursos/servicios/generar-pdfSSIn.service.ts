@@ -12,11 +12,11 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
 @Injectable({
   providedIn: 'root'
 })
-export class GenerarPDFServiceSDL {
+export class GenerarPDFServiceSSIn {
   static color: string;
   static cantidad: string;
      
-  static async generaPDF_SDL(){
+  static async generaPDF_SIn(){
   //static generaPDF_ST(sst: SolicitudSTI, depto: Departamento, folio: number){
     const documentDefinition = { 
       pageSize: 'LETTER',
@@ -48,7 +48,7 @@ export class GenerarPDFServiceSDL {
        {
          columns:[
            {
-             text: '--- SOLICITUD DE SERVICIOS DIVERSOS y LIMPIEZA ---\n',
+             text: '--- SOLICITUD DE SERVICIO A INFRAESTRUCTURA ---\n',
              bold: false,
              fontSize: 12,
              alignment:'center',
@@ -150,37 +150,107 @@ export class GenerarPDFServiceSDL {
           }
         },{
           table:{
-            widths:[ 80, 80, 80, 80,80,'*',90 ],
+            widths:[ 120, 20, 120, 20, 120, 20, 33 ],
             body:[[
-              { colSpan: 2, text: 'PRÉSTAMO DE: ', fontSize: 8, alignment: 'center' },{},
-              { colSpan: 1, text: 'CAFETERÍA ', fontSize: 8, alignment: 'center' },
-              { colSpan: 1, text: 'LIMPIEZA ', fontSize: 8, alignment: 'center' },
-              { colSpan: 3, text: 'FECHA Y HORA DEL SERVICIO ', fontSize: 8, alignment: 'center' }
-            ]
-            ]
-          }
-        },{
-          table:{
-            widths:[ 80, 80, 80, 80,80,'*',90 ],
-            body:[[
-              { colSpan: 1, text: 'SALA DE JUNTAS', fontSize: 8, alignment: 'center' },
-              { colSpan: 1, text: 'AUDITORIO', fontSize: 8, alignment: 'center' },
-              { colSpan: 1, text: 'CERRAJERÍA', fontSize: 8, alignment: 'center' },
-              { colSpan: 1, text: 'OTRO', fontSize: 8, alignment: 'center' },
-              { colSpan: 1, text: 'FECHA: ', fontSize: 8, alignment: 'center' },
-              { colspan: 1, text: '_________________', fontSize: 8, alignment: 'center' }
-            ]
-            ]
-          }
-        },{
-          table:{
-            //widths:[ 60, 200, '*', '*', '*' ],
-            widths:[ 100, 200, 50, 130 ],
-            body:[[
-              { colSpan: 4, text: '', fontSize: 8, alignment: 'center', 
-                border:[false,false,false,true]
+              { text: 'ACABADOS', fontSize: 8, alignment: 'center',
+                border:[true,false,false,false]
               },
-            ]]
+              { text: '', border:[true,true,true,true] },
+              { text: 'ELECTRICIDAD', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false] },
+              { text: '', border:[true,true,true,true] },
+              { text: 'CANCELERÍA', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false]},
+              { text: '', border:[true,true,true,true] },
+              { text: '', border:[false,false,true,false] },
+            ],[
+              { text: 'AZOTEAS Y CUBIERTAS', fontSize: 8, alignment: 'center',
+                border:[true,false,false,false]
+              },
+              { text: '', border:[true,true,true,true] },
+              { text: 'LUMINARIAS EN INTERIORES', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false] },
+              { text: '', border:[true,true,true,true] },
+              { text: 'PINTURA', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false]},
+              { text: '', border:[true,true,true,true] },
+              { text: '', border:[false,false,true,false] },
+            ],[
+              { text: 'ESCALERAS', fontSize: 8, alignment: 'center',
+                border:[true,false,false,false]
+              },
+              { text: '', border:[true,true,true,true] },
+              { text: 'LUMINARIAS EN EXTERIORES', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false] },
+              { text: '', border:[true,true,true,true] },
+              { text: 'VIDRIERÍA', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false]},
+              { text: '', border:[true,true,true,true] },
+              { text: '', border:[false,false,true,false] },
+            ],[
+              { text: 'ESCALERAS DE EMERGENCIA', fontSize: 8, alignment: 'center',
+                border:[true,false,false,false]
+              },
+              { text: '', border:[true,true,true,true] },
+              { text: 'CISTERNAS', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false] },
+              { text: '', border:[true,true,true,true] },
+              { text: 'INSTALACIONES HIDRAÚLICAS Y SANITARIAS', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false]},
+              { text: '', border:[true,true,true,true] },
+              { text: '', border:[false,false,true,false] },
+            ],[
+              { text: 'HERRERÍA', fontSize: 8, alignment: 'center',
+                border:[true,false,false,false]
+              },
+              { text: '', border:[true,true,true,true] },
+              { text: 'TARJAS, LAVABOS, WC´s Y MINGITORIOS', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false] },
+              { text: '', border:[true,true,true,true] },
+              { text: 'CARPINTERÍA', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false]},
+              { text: '', border:[true,true,true,true] },
+              { text: '', border:[false,false,true,false] },
+            ],[
+              { text: 'OTRO', fontSize: 8, alignment: 'center',
+                border:[true,false,false,false]
+              },
+              { text: '', border:[false,false,false,false] },
+              { text: '', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false] },
+              { text: '', border:[false,false,false,false] },
+              { text: '', fontSize: 8, alignment: 'center',
+                border:[false,false,false,false]},
+              { text: '', border:[false,false,false,false] },
+              { text: '', border:[false,false,true,false] },
+            ],[
+              { text: '', fontSize: 8, alignment: 'center',
+                border:[true,false,false,true]
+              },
+              { text: '', border:[false,false,false,true] },
+              { text: '', fontSize: 8, alignment: 'center',
+                border:[false,false,false,true] },
+              { text: '', border:[false,false,false,true] },
+              { text: '', fontSize: 8, alignment: 'center',
+                border:[false,false,false,true]},
+              { text: '', border:[false,false,false,true] },
+              { text: '', border:[false,false,true,true] },
+            ],
+            ]
+          }
+        },{
+          table:{
+            widths:['*'],
+            heights: 10,
+            body:[
+              [
+                { text: '', 
+                  fontSize: 8, alignment:'center', fillColor:'',
+                  border:[false, false, false, false]
+                },
+
+              ]
+            ]
           }
         },{
           table:{
@@ -268,7 +338,7 @@ export class GenerarPDFServiceSDL {
                 { text: 'NOMBRE Y FIRMA', fontSize: 8, alignment: 'center',
                   border:[false, false, true, false]},
               ],[
-                { text: 'LIC. HORACIO VAZQUEZ SOTO',fontSize: 8, alignment: 'center',
+                { text: 'ING. JOSÉ LUIS RAMÍREZ CRUZ',fontSize: 8, alignment: 'center',
                   border:[false, false, false, false]},
                 { text: '', fontSize: 8, alignment: 'center',
                   border:[false, false, false, false]},

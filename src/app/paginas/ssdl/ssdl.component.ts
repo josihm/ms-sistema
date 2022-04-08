@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GenerarPDFServiceSDL } from 'src/app/recursos/servicios/generar-pdfSSDL.service';
+import { GenerarPDFServiceSSIn } from 'src/app/recursos/servicios/generar-pdfSSIn.service';
 
 @Component({
   selector: 'app-ssdl',
@@ -14,6 +15,7 @@ export class SsdlComponent implements OnInit {
   }
 
   pruebaPdf():void {
-    GenerarPDFServiceSDL.generaPDF_SDL();
+    //GenerarPDFServiceSDL.generaPDF_SDL();
+    GenerarPDFServiceSSIn.generaPDF_SIn();
   }
 }

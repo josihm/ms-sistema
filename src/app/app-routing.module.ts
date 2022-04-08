@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'solicitudes-sc', loadChildren: () => import('./paginas/ssc/lista-sc/lista-sc.module').then(m => m.ListaScModule) },
   { path: 'solicitud-sc', loadChildren: () => import('./paginas/ssc/ssc.module').then(m => m.SscModule) },
   { path: 'solicitud-sdl', loadChildren: () => import('./paginas/ssdl/ssdl.module').then(m=> m.SsdlModule) },
+  { path: 'solicitud-sin', loadChildren: () => import('./paginas/ssin/ssin.module').then(m=> m.SsinModule) },
   { path: 'pds', loadChildren: () => import('./paginas/pruebadeservicios/pruebadeservicios.module').then(m => m.PruebadeserviciosModule) }];
 
 @NgModule({
